@@ -1,0 +1,365 @@
+{% extends "base.html" %}
+{% block title %}Help & Support - Stock Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1><i class="fas fa-question-circle"></i> Help & Support</h1>
+        <p>Find answers and get assistance with your inventory management</p>
+    </div>
+</div>
+
+<div class="help-container">
+    <div class="help-sidebar">
+        <div class="help-menu">
+            <h3>Quick Help</h3>
+            <ul class="help-menu-list">
+                <li><a href="#getting-started" onclick="showSection('getting-started')"><i class="fas fa-play"></i> Getting Started</a></li>
+                <li><a href="#inventory" onclick="showSection('inventory')"><i class="fas fa-warehouse"></i> Inventory Management</a></li>
+                <li><a href="#orders" onclick="showSection('orders')"><i class="fas fa-shopping-cart"></i> Order Processing</a></li>
+                <li><a href="#billing" onclick="showSection('billing')"><i class="fas fa-file-invoice"></i> Billing & GST</a></li>
+                <li><a href="#reports" onclick="showSection('reports')"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                <li><a href="#troubleshooting" onclick="showSection('troubleshooting')"><i class="fas fa-tools"></i> Troubleshooting</a></li>
+            </ul>
+        </div>
+        
+        <div class="contact-card">
+            <h3><i class="fas fa-headset"></i> Need More Help?</h3>
+            <p>Contact our support team</p>
+            <button class="btn btn-primary" onclick="contactSupport()">
+                <i class="fas fa-envelope"></i> Contact Support
+            </button>
+        </div>
+    </div>
+    
+    <div class="help-content">
+        <div class="help-section active" id="getting-started">
+            <h2><i class="fas fa-play"></i> Getting Started</h2>
+            <div class="help-cards">
+                <div class="help-card">
+                    <h3>1. Dashboard Overview</h3>
+                    <p>Your dashboard provides a quick overview of your inventory status, recent orders, and key metrics. Use the metric cards to quickly assess your business performance.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>2. Adding Products</h3>
+                    <p>Go to Inventory → Add Product to create new items. Make sure to include HSN codes for GST compliance and set appropriate minimum stock levels.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>3. Managing Stock</h3>
+                    <p>Stock levels are automatically updated when you process orders. You can manually adjust stock levels from the inventory page when needed.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="help-section" id="inventory">
+            <h2><i class="fas fa-warehouse"></i> Inventory Management</h2>
+            <div class="help-cards">
+                <div class="help-card">
+                    <h3>Product Information</h3>
+                    <p>Each product requires a unique SKU, name, description, category, and pricing information. HSN codes are mandatory for GST compliance.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Stock Tracking</h3>
+                    <p>The system tracks available quantity, reserved quantity, and minimum stock levels. You'll receive alerts when stock falls below minimum levels.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Categories & Organization</h3>
+                    <p>Organize products using categories and tags for better inventory management and easier searching.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="help-section" id="orders">
+            <h2><i class="fas fa-shopping-cart"></i> Order Processing</h2>
+            <div class="help-cards">
+                <div class="help-card">
+                    <h3>Creating Orders</h3>
+                    <p>Create sales or purchase orders from the Orders page. The system automatically calculates totals, taxes, and updates stock levels.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Order Status</h3>
+                    <p>Orders can be in Pending, Processing, Shipped, Delivered, or Cancelled status. Update status as orders progress through fulfillment.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Order Management</h3>
+                    <p>View order details, print invoices, track payments, and manage customer information from the order management interface.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="help-section" id="billing">
+            <h2><i class="fas fa-file-invoice"></i> Billing & GST</h2>
+            <div class="help-cards">
+                <div class="help-card">
+                    <h3>GST Compliance</h3>
+                    <p>The system automatically calculates CGST/SGST for intrastate and IGST for interstate transactions based on customer GST numbers.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Invoice Generation</h3>
+                    <p>Generate professional invoices with all required GST details, company information, and payment terms.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Tax Reports</h3>
+                    <p>Generate GST reports for filing returns and maintaining compliance with Indian tax regulations.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="help-section" id="reports">
+            <h2><i class="fas fa-chart-bar"></i> Reports</h2>
+            <div class="help-cards">
+                <div class="help-card">
+                    <h3>Sales Reports</h3>
+                    <p>View detailed sales analytics, revenue trends, and performance metrics across different time periods.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Inventory Reports</h3>
+                    <p>Track stock movements, identify slow-moving items, and monitor inventory turnover rates.</p>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Financial Reports</h3>
+                    <p>Generate profit/loss statements, tax reports, and financial summaries for business analysis.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="help-section" id="troubleshooting">
+            <h2><i class="fas fa-tools"></i> Troubleshooting</h2>
+            <div class="help-cards">
+                <div class="help-card">
+                    <h3>Common Issues</h3>
+                    <ul>
+                        <li>Stock levels not updating: Check if orders are properly completed</li>
+                        <li>GST calculation errors: Verify HSN codes and customer GST numbers</li>
+                        <li>Reports not loading: Clear browser cache and try again</li>
+                    </ul>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Performance Tips</h3>
+                    <ul>
+                        <li>Regularly update stock levels to maintain accuracy</li>
+                        <li>Archive old orders to improve system performance</li>
+                        <li>Use categories and tags for better organization</li>
+                    </ul>
+                </div>
+                
+                <div class="help-card">
+                    <h3>Data Backup</h3>
+                    <p>Regularly export your data using the Reports section. Keep backups of important business information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.help-section').forEach(section => {
+        section.classList.remove('active');
+    });
+    
+    // Show selected section
+    document.getElementById(sectionId).classList.add('active');
+    
+    // Update menu active state
+    document.querySelectorAll('.help-menu-list a').forEach(link => {
+        link.classList.remove('active');
+    });
+    
+    document.querySelector(`[href="#${sectionId}"]`).classList.add('active');
+}
+
+function contactSupport() {
+    showNotification('Support contact feature coming soon! For now, please check the documentation.', 'info');
+}
+
+// Initialize first section as active
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector('.help-menu-list a').classList.add('active');
+});
+</script>
+
+<style>
+.help-container {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 2rem;
+    max-width: 1400px;
+}
+
+.help-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.help-menu {
+    background: var(--solid-bg-primary);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: var(--solid-shadow);
+    border: 1px solid var(--solid-border);
+}
+
+.help-menu h3 {
+    color: var(--text-primary);
+    margin: 0 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.help-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.help-menu-list li {
+    margin-bottom: 0.5rem;
+}
+
+.help-menu-list a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.help-menu-list a:hover,
+.help-menu-list a.active {
+    background: var(--accent-primary);
+    color: white;
+}
+
+.help-menu-list a i {
+    width: 16px;
+    text-align: center;
+}
+
+.contact-card {
+    background: var(--gradient-1);
+    color: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.contact-card h3 {
+    margin: 0 0 0.5rem;
+}
+
+.contact-card p {
+    margin: 0 0 1rem;
+    opacity: 0.9;
+}
+
+.contact-card .btn {
+    background: white;
+    color: var(--accent-primary);
+    border: none;
+}
+
+.contact-card .btn:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.help-content {
+    background: var(--solid-bg-primary);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--solid-shadow);
+    border: 1px solid var(--solid-border);
+}
+
+.help-section {
+    display: none;
+}
+
+.help-section.active {
+    display: block;
+}
+
+.help-section h2 {
+    color: var(--text-primary);
+    margin: 0 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.help-cards {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.help-card {
+    background: var(--solid-bg-secondary);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 1px solid var(--solid-border);
+}
+
+.help-card h3 {
+    color: var(--text-primary);
+    margin: 0 0 1rem;
+}
+
+.help-card p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.help-card ul {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+@media (max-width: 968px) {
+    .help-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .help-sidebar {
+        order: 2;
+        flex-direction: row;
+        gap: 1rem;
+    }
+    
+    .help-content {
+        order: 1;
+    }
+    
+    .help-menu,
+    .contact-card {
+        flex: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .help-sidebar {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}

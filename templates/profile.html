@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+{% block title %}My Profile - Stock Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="page-title">
+        <h1><i class="fas fa-user-circle"></i> My Profile</h1>
+        <p>View and manage your account information</p>
+    </div>
+</div>
+
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-avatar-large">
+            <i class="fas fa-user"></i>
+        </div>
+        
+        <div class="profile-info-section">
+            <h2>{{ user.name }}</h2>
+            <span class="profile-role-badge">{{ user.role }}</span>
+        </div>
+        
+        <div class="profile-details">
+            <div class="profile-row">
+                <div class="profile-label">
+                    <i class="fas fa-envelope"></i>
+                    <span>Email</span>
+                </div>
+                <div class="profile-value">{{ user.email }}</div>
+            </div>
+            
+            <div class="profile-row">
+                <div class="profile-label">
+                    <i class="fas fa-user-tag"></i>
+                    <span>Role</span>
+                </div>
+                <div class="profile-value">{{ user.role }}</div>
+            </div>
+            
+            <div class="profile-row">
+                <div class="profile-label">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Member Since</span>
+                </div>
+                <div class="profile-value">{{ user.joined_date }}</div>
+            </div>
+            
+            <div class="profile-row">
+                <div class="profile-label">
+                    <i class="fas fa-clock"></i>
+                    <span>Last Login</span>
+                </div>
+                <div class="profile-value">{{ user.last_login }}</div>
+            </div>
+        </div>
+        
+        <div class="profile-actions">
+            <button class="btn btn-primary" onclick="editProfile()">
+                <i class="fas fa-edit"></i> Edit Profile
+            </button>
+            <button class="btn btn-secondary" onclick="changePassword()">
+                <i class="fas fa-key"></i> Change Password
+            </button>
+        </div>
+    </div>
+    
+    <div class="quick-stats-card">
+        <h3><i class="fas fa-chart-line"></i> Your Activity</h3>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-icon success">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number">156</span>
+                    <span class="stat-label">Actions Completed</span>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-icon info">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number">42</span>
+                    <span class="stat-label">Total Logins</span>
+                </div>
+            </div>
+            
+            <div class="stat-item">
+                <div class="stat-icon warning">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-number">23</span>
+                    <span class="stat-label">Products Added</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function editProfile() {
+    showNotification('Profile editing feature coming soon!', 'info');
+}
+
+function changePassword() {
+    showNotification('Password change feature coming soon!', 'info');
+}
+</script>
+
+<style>
+.profile-container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    max-width: 1200px;
+}
+
+.profile-card {
+    background: var(--solid-bg-primary);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--solid-shadow);
+    border: 1px solid var(--solid-border);
+}
+
+.profile-avatar-large {
+    width: 120px;
+    height: 120px;
+    background: var(--gradient-1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 3rem;
+    color: white;
+}
+
+.profile-info-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.profile-info-section h2 {
+    color: var(--text-primary);
+    margin: 0 0 0.5rem;
+}
+
+.profile-role-badge {
+    background: var(--gradient-1);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.profile-details {
+    margin-bottom: 2rem;
+}
+
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--solid-border);
+}
+
+.profile-row:last-child {
+    border-bottom: none;
+}
+
+.profile-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.profile-label i {
+    width: 20px;
+    color: var(--accent-primary);
+}
+
+.profile-value {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.quick-stats-card {
+    background: var(--solid-bg-primary);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: var(--solid-shadow);
+    border: 1px solid var(--solid-border);
+    height: fit-content;
+}
+
+.quick-stats-card h3 {
+    color: var(--text-primary);
+    margin: 0 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--solid-bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--solid-border);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.stat-icon.success { background: var(--accent-success); }
+.stat-icon.info { background: var(--accent-info); }
+.stat-icon.warning { background: var(--accent-warning); }
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .profile-actions {
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}

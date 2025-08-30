@@ -52,6 +52,28 @@ def reports():
 def settings():
     return render_template('settings.html')
 
+@app.route('/profile')
+def profile():
+    # In a real app, you'd get user data from session/database
+    user_data = {
+        'name': 'Admin',
+        'email': 'admin@example.com',
+        'role': 'Administrator',
+        'joined_date': '2024-01-01',
+        'last_login': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
+    return render_template('profile.html', user=user_data)
+
+@app.route('/help')
+def help_support():
+    return render_template('help.html')
+
+@app.route('/logout')
+def logout():
+    # In a real app, you'd clear the session here
+    # session.clear()
+    return redirect(url_for('landing'))
+
 # Utility Functions
 def calculate_gst_split(amount, gst_rate, business_state_code, customer_gst):
     """Calculate CGST/SGST or IGST based on state codes"""
