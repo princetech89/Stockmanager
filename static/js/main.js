@@ -634,6 +634,82 @@ class StockManagementApp {
             console.log('Profile dropdown toggled:', profileMenu.classList.contains('active'));
         }
     }
+
+    // Device-specific adjustments
+    adjustForSmallMobile() {
+        // Optimizations for small mobile devices (≤479px)
+        const sidebar = this.sidebar;
+        if (sidebar) {
+            sidebar.style.width = '100%';
+            sidebar.classList.add('collapsed');
+        }
+        
+        // Adjust font sizes and spacing for small screens
+        document.documentElement.style.setProperty('--base-font-size', '14px');
+        document.documentElement.style.setProperty('--button-padding', '8px 12px');
+    }
+
+    adjustForMobile() {
+        // Optimizations for mobile devices (480px-767px)
+        const sidebar = this.sidebar;
+        if (sidebar) {
+            sidebar.style.width = '280px';
+            sidebar.classList.add('collapsed');
+        }
+        
+        // Standard mobile font and spacing
+        document.documentElement.style.setProperty('--base-font-size', '15px');
+        document.documentElement.style.setProperty('--button-padding', '10px 16px');
+    }
+
+    adjustForTablet() {
+        // Optimizations for tablet devices (768px-1023px)
+        const sidebar = this.sidebar;
+        if (sidebar) {
+            sidebar.style.width = '250px';
+            sidebar.classList.remove('collapsed');
+        }
+        
+        // Tablet-friendly sizing
+        document.documentElement.style.setProperty('--base-font-size', '16px');
+        document.documentElement.style.setProperty('--button-padding', '12px 20px');
+    }
+
+    adjustForDesktop() {
+        // Optimizations for desktop devices (≥1024px)
+        const sidebar = this.sidebar;
+        if (sidebar) {
+            sidebar.style.width = '';
+            sidebar.classList.remove('collapsed');
+        }
+        
+        // Desktop standard sizing
+        document.documentElement.style.setProperty('--base-font-size', '16px');
+        document.documentElement.style.setProperty('--button-padding', '12px 24px');
+        
+        // Restore sidebar state from localStorage
+        const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
+        if (sidebarCollapsed === 'true') {
+            sidebar.classList.add('collapsed');
+        }
+    }
+
+    updateInterfaceForDevice() {
+        // Update touch targets and interface elements based on device
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        if (isTouchDevice) {
+            document.body.classList.add('touch-device');
+            // Increase touch target sizes
+            document.documentElement.style.setProperty('--touch-target-size', '44px');
+        } else {
+            document.body.classList.remove('touch-device');
+            document.documentElement.style.setProperty('--touch-target-size', '32px');
+        }
+        
+        // Update tooltips visibility
+        this.updateTooltips();
+    }
 }
 
 // Global functions for backward compatibility
