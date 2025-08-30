@@ -1,0 +1,31 @@
+Run python -c "import app; print('App imports successfully')"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/home/runner/work/Stockmanager/Stockmanager/app.py", line 33, in <module>
+    import models
+  File "/home/runner/work/Stockmanager/Stockmanager/models.py", line 5, in <module>
+    class User(db.Model):
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/flask_sqlalchemy/model.py", line 100, in __init__
+    super().__init__(name, bases, d, **kwargs)
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/flask_sqlalchemy/model.py", line 120, in __init__
+    super().__init__(name, bases, d, **kwargs)
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/sqlalchemy/orm/decl_api.py", line 195, in __init__
+    _as_declarative(reg, cls, dict_)
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py", line 247, in _as_declarative
+    return _MapperConfig.setup_mapping(registry, cls, dict_, None, {})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py", line 328, in setup_mapping
+    return _ClassScanMapperConfig(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py", line 520, in __init__
+    super().__init__(registry, cls_, mapper_kw)
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/sqlalchemy/orm/decl_base.py", line 344, in __init__
+    instrumentation.register_class(
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/sqlalchemy/orm/instrumentation.py", line 684, in register_class
+    manager._update_state(
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/sqlalchemy/orm/instrumentation.py", line 209, in _update_state
+    registry._add_manager(self)
+  File "/opt/hostedtoolcache/Python/3.11.13/x64/lib/python3.11/site-packages/sqlalchemy/orm/decl_api.py", line 1380, in _add_manager
+    raise exc.ArgumentError(
+sqlalchemy.exc.ArgumentError: Class '<class 'models.User'>' already has a primary mapper defined. 
+Error: Process completed with exit code 1.
