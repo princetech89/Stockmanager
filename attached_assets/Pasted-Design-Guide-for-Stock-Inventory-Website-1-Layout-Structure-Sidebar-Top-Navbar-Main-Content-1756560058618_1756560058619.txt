@@ -1,0 +1,128 @@
+Design Guide for Stock Inventory Website
+🔹 1. Layout Structure
+
+Sidebar + Top Navbar + Main Content → Classic dashboard structure.
+
+Grid-based layout → Use a 12-column system (Tailwind / Bootstrap) for responsive design.
+
+Card-based UI → Each section (stock, sales, reports) inside a card with shadow & rounded corners.
+
+🔹 2. Color Palette
+
+Stick to 2–3 main colors:
+
+Primary: Blue (trust, business feel) → #2563eb
+
+Secondary: Gray (neutral) → #f3f4f6
+
+Accent: Green (success) / Red (alerts)
+
+Background → Light/White
+
+Dark Mode → Optional, with dark gray background (#1f2937)
+
+🔹 3. Typography
+
+Use Sans-serif fonts for readability:
+
+Headings → Poppins / Inter / Roboto (Bold)
+
+Body Text → Roboto / Open Sans (Regular)
+
+Font Sizes:
+
+Dashboard Title → text-2xl font-bold
+
+Section Heading → text-xl font-semibold
+
+Table Content → text-sm
+
+🔹 4. Navigation
+
+Sidebar (Left)
+
+Icon + Label (Dashboard, Inventory, Orders, Billing, Reports, Settings)
+
+Collapsible (expand/collapse for mobile)
+
+Top Navbar
+
+Left → Logo/Brand Name
+
+Center → Search bar (quick product search)
+
+Right → Notifications bell 🔔 + User Profile dropdown
+
+🔹 5. Dashboard Page Design
+
+Top Row → KPI Cards (4 cards)
+
+Total Stock
+
+Low Stock Items
+
+Total Sales Today
+
+Pending Orders
+
+📌 Style → Card with icon on left, number & label on right, gradient background
+
+Middle Section → Charts
+
+Left → Bar Chart (Sales per Month)
+
+Right → Pie Chart (Product Categories)
+
+Bottom Section → Recent Activity
+
+Table: Last 5 orders / stock updates
+
+🔹 6. Tables (Inventory / Orders)
+
+Clean, bordered, alternate row colors.
+
+Columns with sorting arrows ↑↓.
+
+Action buttons (Edit ✏️, Delete 🗑, View 👁).
+
+Pagination (bottom).
+
+Hover effect → Highlight row on mouse hover.
+
+🔹 7. Forms (Add Product / Billing)
+
+Simple card layout with input fields inside.
+
+Group fields with labels above inputs.
+
+Use dropdowns for GST rates, categories.
+
+Buttons → Rounded, colored (e.g., Save = Green, Cancel = Gray).
+
+🔹 8. Reports & Analytics
+
+Use charts in cards.
+
+Filters at the top (date range, product, vendor).
+
+Export buttons styled with icons (📄 PDF, 📊 Excel, 📑 CSV).
+
+🔹 9. Micro-Interactions
+
+Hover animations → Buttons scale slightly.
+
+Toast notifications → e.g., “Stock updated ✅”.
+
+Loading spinners → When fetching data.
+
+Empty states → Show illustration when no data (instead of blank).
+
+🔹 10. Example Look & Feel
+
+Think of it like a mix between:
+
+Google Admin Console (minimal)
+
+Zoho Inventory (Indian business feel)
+
+Modern SaaS dashboards (cards + charts)

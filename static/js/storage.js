@@ -106,6 +106,47 @@ class DataStorage {
         }
     }
 
+    // Settings management
+    getSettings() {
+        try {
+            const settings = localStorage.getItem(this.storageKeys.settings);
+            return settings ? JSON.parse(settings) : this.getDefaultSettings();
+        } catch (error) {
+            console.error('Failed to get settings:', error);
+            return this.getDefaultSettings();
+        }
+    }
+
+    getDefaultSettings() {
+        return {
+            general: {
+                appName: 'Stock Management System',
+                currency: 'INR',
+                dateFormat: 'DD/MM/YYYY',
+                lowStockThreshold: 10
+            },
+            business: {
+                name: 'Your Business Name',
+                type: 'retail',
+                address: '',
+                phone: '',
+                email: '',
+                website: '',
+                logo: ''
+            },
+            gst: {
+                number: '',
+                stateCode: '07',
+                rates: {
+                    rate1: 5,
+                    rate2: 12,
+                    rate3: 18,
+                    rate4: 28
+                }
+            }
+        };
+    }
+
     /**
      * API Communication Methods
      */
