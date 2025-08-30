@@ -22,10 +22,21 @@ app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
 # Initialize the app with the extension
 db.init_app(app)
 
+# Import models BEFORE app context to avoid double registration
+import models
+import models_advanced
+
+# Import routes and enhanced features
+import routes
+try:
+    from enhanced_features import enhanced_bp
+    app.register_blueprint(enhanced_bp)
+    print("Enhanced features loaded successfully")
+except ImportError as e:
+    print(f"Enhanced features not loaded: {e}")
+
+# Create tables and initialize data within app context
 with app.app_context():
-    # Import models to ensure tables are created
-    import models
-    import models_advanced
     db.create_all()
     
     # Initialize GST states
@@ -35,15 +46,6 @@ with app.app_context():
         print("Database initialized with GST states")
     except Exception as e:
         print(f"Error initializing GST states: {e}")
-
-# Import routes and enhanced features after app initialization
-import routes
-try:
-    from enhanced_features import enhanced_bp
-    app.register_blueprint(enhanced_bp)
-    print("Enhanced features loaded successfully")
-except ImportError as e:
-    print(f"Enhanced features not loaded: {e}")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

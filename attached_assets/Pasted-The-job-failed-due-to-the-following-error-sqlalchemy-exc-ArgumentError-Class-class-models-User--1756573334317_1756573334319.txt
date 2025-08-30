@@ -1,0 +1,31 @@
+The job failed due to the following error: sqlalchemy.exc.ArgumentError: Class '<class 'models.User'>' already hasThe failure is caused by the error:
+
+sqlalchemy.exc.Argument a primary mapper defined.
+
+This indicates that theError: Class '<class 'models.User'>' already has User model in your models.py file is being defined or a primary mapper defined.
+
+This means the User model imported more than once, which causes SQLAlchemy to in models.py is being imported or defined more than once attempt to map the same class multiple times.
+
+**, causing SQLAlchemy to try to map the same class twice.
+
+Solution:
+
+Check your codebase (especially yourSolution:**
+Ensure the User class is only defined once application entry point, blueprints, or any modules that and is not being imported in a way that could might import User) to ensure that User is only imported cause circular imports or double loading.
+If you are from models.py once.
+Do not define the User importing User elsewhere, always do so from the same class in multiple places. Make sure all references to User use the same import: from models import User. module (e.g., from models import User).
+Check for duplicate model definitions in your codebase.
+- If you are using Flask and creating the SQLAlchemy object (db) multiple times, ensure db is instantiated onlyCode suggestion:
+If you need to import the User model once and imported everywhere else.
+
+If you want to in multiple files, use a single import source and enforce this, review your imports and application structure avoid relative imports that could cause Python to to avoid circular or repeated imports of models load the module twice.
+
+Example of correct import:
+
+.py.
+
+Reference:
+- See the User model definition inpython
+# Correct usage: Always import from the main models models.py (ref: b675ad90201145b950d56ec4510dd84da module
+from models import User
+Also,4ec66da). check if your application or test runner is importing or initializing the models.py file multiple times (
