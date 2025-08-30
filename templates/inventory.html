@@ -6,7 +6,7 @@
 <div class="page-header">
     <h1 class="page-title">Inventory Management</h1>
     <div class="page-actions">
-        <button class="btn btn-primary animated" onclick="openAddProductModal()">
+        <button class="btn btn-primary" onclick="openModernSidePanel()">
             <i class="fas fa-plus"></i>
             Add Product
         </button>
@@ -81,21 +81,17 @@
         </button>
     </div>
 </div>
-<!-- Animated Side Panel Container -->
-<div id="sidePanelBackdrop" class="side-panel-backdrop"></div>
-<div id="inventorySidePanel" class="side-panel">
-    <!-- Side panel content will be populated by JavaScript -->
-</div>
+<!-- Modern side panel will be created dynamically -->
 {% endblock %}
 
-{% block scripts %}
+{% block scripts %>
 <script src="{{ url_for('static', filename='js/data-storage.js') }}"></script>
 <script src="{{ url_for('static', filename='js/inventory.js') }}"></script>
-<script src="{{ url_for('static', filename='js/inventory-globals.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modern-sidepanel.js') }}"></script>
 <script>
 // Initialize inventory manager when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing inventory manager...');
+    console.log('Initializing modern inventory system...');
     if (typeof InventoryManager !== 'undefined') {
         window.inventoryManager = new InventoryManager();
         window.inventoryManager.init();
