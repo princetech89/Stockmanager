@@ -89,5 +89,20 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="{{ url_for('static', filename='js/data-storage.js') }}"></script>
 <script src="{{ url_for('static', filename='js/inventory.js') }}"></script>
+<script src="{{ url_for('static', filename='js/inventory-globals.js') }}"></script>
+<script>
+// Initialize inventory manager when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Initializing inventory manager...');
+    if (typeof InventoryManager !== 'undefined') {
+        window.inventoryManager = new InventoryManager();
+        window.inventoryManager.init();
+        console.log('Inventory manager initialized successfully');
+    } else {
+        console.error('InventoryManager class not found');
+    }
+});
+</script>
 {% endblock %}
