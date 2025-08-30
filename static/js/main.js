@@ -253,6 +253,69 @@ class StockManagementApp {
         this.updateInterfaceForDevice();
     }
 
+    adjustForSmallMobile() {
+        // Optimize for very small screens
+        const charts = document.querySelectorAll('.chart-container');
+        charts.forEach(chart => chart.style.height = '200px');
+        
+        // Stack buttons vertically
+        const buttonGroups = document.querySelectorAll('.btn-group');
+        buttonGroups.forEach(group => {
+            group.style.flexDirection = 'column';
+        });
+    }
+
+    adjustForMobile() {
+        // Mobile optimizations
+        const charts = document.querySelectorAll('.chart-container');
+        charts.forEach(chart => chart.style.height = '250px');
+        
+        // Hide search on mobile
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox) searchBox.style.display = 'none';
+    }
+
+    adjustForTablet() {
+        // Tablet optimizations
+        const charts = document.querySelectorAll('.chart-container');
+        charts.forEach(chart => chart.style.height = '300px');
+        
+        // Show limited search on tablet
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox) {
+            searchBox.style.display = 'block';
+            searchBox.style.maxWidth = '200px';
+        }
+    }
+
+    adjustForDesktop() {
+        // Desktop optimizations
+        const charts = document.querySelectorAll('.chart-container');
+        charts.forEach(chart => chart.style.height = '350px');
+        
+        // Full search on desktop
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox) {
+            searchBox.style.display = 'block';
+            searchBox.style.maxWidth = 'none';
+        }
+    }
+
+    updateInterfaceForDevice() {
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        document.body.classList.toggle('touch-device', isTouchDevice);
+        
+        // Update button sizes for touch
+        if (isTouchDevice) {
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                if (!btn.style.minHeight) {
+                    btn.style.minHeight = '44px';
+                }
+            });
+        }
+    }
+
     updateNotificationCount() {
         if (!this.notificationBadge) return;
 
