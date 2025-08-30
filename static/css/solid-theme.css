@@ -427,23 +427,12 @@ body {
     color: var(--accent-primary);
 }
 
-/* Modern Sidebar Header */
-.sidebar-header .logo {
-    background: var(--gradient-1) !important;
-    color: white !important;
-    border: none !important;
-    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2) !important;
-    z-index: 1001 !important;
-    position: relative !important;
-}
-
-.logo-text {
-    color: white !important;
-    font-weight: 700 !important;
-}
-
-.logo-icon {
-    filter: brightness(0) invert(1) !important;
+/* Clean Sidebar Header */
+.sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--solid-border);
+    display: flex;
+    justify-content: flex-end;
 }
 
 /* Search Box Enhancement */
