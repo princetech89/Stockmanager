@@ -684,7 +684,3 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-        // Tablet optimizations
-        const charts = document.querySelectorAll('.chart-container');
-        charts.forEach(chart => chart.style.height = '300px');
-}
