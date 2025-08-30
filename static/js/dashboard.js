@@ -19,7 +19,7 @@ class DashboardManager {
         this.loadRecentActivities();
         this.loadLowStockAlerts();
         
-        // Auto-refresh every 5 minutes
+        // Auto-refresh every 30 seconds for quick updates
         this.startAutoRefresh();
     }
 

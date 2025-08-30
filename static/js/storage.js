@@ -67,8 +67,12 @@ class DataStorage {
      * API Communication Methods
      */
     async apiRequest(endpoint, options = {}) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        
         try {
             const response = await fetch(`${this.baseURL}${endpoint}`, {
+                signal: controller.signal,
                 headers: {
                     'Content-Type': 'application/json',
                     ...options.headers
