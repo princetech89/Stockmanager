@@ -397,10 +397,9 @@ class InventoryManager {
         const backdrop = document.createElement('div');
         backdrop.className = 'side-panel-backdrop';
         backdrop.addEventListener('click', (e) => {
-            if (e.target === backdrop) {
-                console.log('Backdrop direct click - closing panel');
-                this.closeSidePanel();
-            }
+            console.log('Backdrop clicked - closing panel');
+            this.closeSidePanel();
+            e.stopPropagation();
         });
         document.body.appendChild(backdrop);
 
@@ -547,58 +546,29 @@ class InventoryManager {
     setupAutoCloseListeners() {
         // ESC key listener - always works
         this.escapeHandler = (e) => {
-            if (e.key === 'Escape' && document.querySelector('.side-panel')) {
+            if (e.key === 'Escape') {
+                console.log('ESC pressed - closing panel');
                 this.closeSidePanel();
             }
         };
         document.addEventListener('keydown', this.escapeHandler);
 
-        // Outside click listener - click anywhere outside panel
+        // Outside click listener - simplified and reliable
         setTimeout(() => {
             this.clickHandler = (e) => {
                 const panel = document.querySelector('.side-panel');
                 const backdrop = document.querySelector('.side-panel-backdrop');
                 
-                // Check if click is on backdrop or outside panel
-                if (backdrop && e.target === backdrop) {
-                    console.log('Backdrop clicked - closing panel');
-                    this.closeSidePanel();
-                    return;
-                }
-                
-                // Check if click is outside panel
+                // If panel exists and click is not inside panel
                 if (panel && !panel.contains(e.target)) {
-                    console.log('Outside panel clicked - closing panel');
+                    console.log('Click outside panel - closing');
                     this.closeSidePanel();
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
             };
-            document.addEventListener('click', this.clickHandler);
-        }, 200); // Delay to prevent immediate closing
-
-        // Auto-close after form submission success
-        this.setupSuccessAutoClose();
-
-        // Auto-close on window resize (mobile orientation change)
-        this.resizeHandler = () => {
-            if (window.innerWidth <= 768) {
-                // Delay close on mobile to allow for orientation change
-                setTimeout(() => {
-                    if (document.querySelector('.side-panel')) {
-                        this.closeSidePanel();
-                    }
-                }, 100);
-            }
-        };
-        window.addEventListener('resize', this.resizeHandler);
-
-        // Auto-close after long inactivity (10 minutes)
-        this.resetInactivityTimer();
-        this.activityEvents = ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'];
-        this.activityHandler = () => this.resetInactivityTimer();
-        
-        this.activityEvents.forEach(event => {
-            document.addEventListener(event, this.activityHandler);
-        });
+            document.addEventListener('click', this.clickHandler, true);
+        }, 300);
     }
 
     setupSuccessAutoClose() {
@@ -632,21 +602,13 @@ class InventoryManager {
         // Remove all event listeners to prevent memory leaks
         if (this.escapeHandler) {
             document.removeEventListener('keydown', this.escapeHandler);
+            this.escapeHandler = null;
         }
         if (this.clickHandler) {
-            document.removeEventListener('click', this.clickHandler);
+            document.removeEventListener('click', this.clickHandler, true);
+            this.clickHandler = null;
         }
-        if (this.resizeHandler) {
-            window.removeEventListener('resize', this.resizeHandler);
-        }
-        if (this.activityHandler && this.activityEvents) {
-            this.activityEvents.forEach(event => {
-                document.removeEventListener(event, this.activityHandler);
-            });
-        }
-        if (this.inactivityTimer) {
-            clearTimeout(this.inactivityTimer);
-        }
+        console.log('Auto-close listeners removed');
     }
 
     setupFormInteractions() {
