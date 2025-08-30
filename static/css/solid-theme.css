@@ -23,16 +23,17 @@
     display: none;
 }
 
-/* Solid Sidebar */
+/* Modern Organic Sidebar */
 .sidebar {
-    background: var(--solid-bg-primary);
-    border-right: 2px solid var(--solid-border);
-    border-radius: 0;
-    box-shadow: var(--solid-shadow);
+    background: linear-gradient(145deg, var(--solid-bg-primary), var(--solid-bg-secondary));
+    border: none;
+    border-radius: 0 40px 40px 0;
+    box-shadow: 8px 0 30px rgba(139, 92, 246, 0.15);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     z-index: 1000;
     position: relative;
+    overflow: visible;
 }
 
 .sidebar-header .logo {
@@ -59,16 +60,17 @@
     backdrop-filter: none;
 }
 
-/* Solid Topbar */
+/* Floating Organic Header */
 .topbar {
-    background: var(--solid-bg-primary);
-    border-bottom: 2px solid var(--solid-border);
-    border-radius: 0;
-    box-shadow: var(--solid-shadow);
+    background: linear-gradient(135deg, var(--solid-bg-primary), var(--solid-bg-secondary));
+    border: none;
+    border-radius: 0 0 30px 30px;
+    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.12);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
     z-index: 999;
     position: relative;
+    margin: 0 20px 20px 20px;
 }
 
 .search-box {
@@ -621,20 +623,21 @@ body {
     position: relative !important;
 }
 
-/* Side Panel Critical Fixes */
+/* Organic Floating Side Panel */
 .side-panel {
     z-index: 1200 !important;
     position: fixed !important;
-    top: 0 !important;
-    right: 0 !important;
-    width: 400px !important;
-    height: 100vh !important;
-    background: var(--solid-bg-primary) !important;
-    border-left: 2px solid var(--solid-border) !important;
-    transform: translateX(100%) !important;
-    transition: transform 0.3s ease !important;
-    overflow-y: auto !important;
-    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1) !important;
+    top: 20px !important;
+    right: 20px !important;
+    width: 380px !important;
+    height: calc(100vh - 40px) !important;
+    background: linear-gradient(145deg, var(--solid-bg-primary), var(--solid-bg-secondary)) !important;
+    border: none !important;
+    border-radius: 25px !important;
+    transform: translateX(420px) !important;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    overflow: hidden !important;
+    box-shadow: -8px 8px 40px rgba(139, 92, 246, 0.2) !important;
 }
 
 .side-panel.show {
@@ -711,5 +714,196 @@ body {
         width: 100vw !important;
         border-left: none !important;
         border-top: 2px solid var(--solid-border) !important;
+    }
+}
+
+/* Additional Organic Design Elements */
+
+/* Floating Sidebar with Organic Shape */
+.sidebar::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    width: 20px;
+    height: 60px;
+    background: var(--gradient-1);
+    border-radius: 15px;
+    opacity: 0.7;
+}
+
+.sidebar::after {
+    content: '';
+    position: absolute;
+    bottom: 100px;
+    right: -8px;
+    width: 15px;
+    height: 40px;
+    background: var(--accent-success);
+    border-radius: 10px;
+    opacity: 0.6;
+}
+
+/* Organic Navigation Links */
+.nav-link {
+    border-radius: 20px 40px 40px 20px;
+    margin: 6px 8px;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: var(--accent-primary);
+    border-radius: 0 10px 10px 0;
+    transform: scaleY(0);
+    transition: transform 0.3s ease;
+}
+
+.nav-link.active::before {
+    transform: scaleY(1);
+}
+
+.nav-link:hover::before {
+    transform: scaleY(0.7);
+    background: var(--accent-secondary);
+}
+
+/* Floating Header Design */
+.topbar {
+    position: relative;
+    overflow: visible;
+}
+
+.topbar::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50px;
+    width: 60px;
+    height: 10px;
+    background: var(--gradient-1);
+    border-radius: 50px;
+    opacity: 0.6;
+}
+
+.topbar::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: 100px;
+    width: 40px;
+    height: 6px;
+    background: var(--accent-info);
+    border-radius: 50px;
+    opacity: 0.5;
+}
+
+/* Organic Side Panel Design */
+.side-panel-header {
+    background: var(--gradient-1) !important;
+    color: white !important;
+    border-radius: 25px 25px 0 0 !important;
+    border-bottom: none !important;
+    position: relative !important;
+}
+
+.side-panel-header::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 20px;
+    background: var(--gradient-1);
+    border-radius: 0 0 30px 30px;
+    opacity: 0.7;
+}
+
+.side-panel-title {
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+}
+
+.side-panel-close {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+.side-panel-close:hover {
+    background: var(--accent-danger) !important;
+    border-color: var(--accent-danger) !important;
+    transform: scale(1.1) !important;
+}
+
+/* Organic Buttons and Controls */
+.sidebar-toggle {
+    background: var(--gradient-1) !important;
+    border: none !important;
+    border-radius: 15px !important;
+    width: 45px !important;
+    height: 45px !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3) !important;
+    transition: all 0.3s ease !important;
+}
+
+.sidebar-toggle:hover {
+    transform: scale(1.1) rotate(90deg) !important;
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4) !important;
+}
+
+/* Clean Sidebar Header */
+.sidebar-header {
+    background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2)) !important;
+    border-radius: 0 40px 20px 0 !important;
+    border-bottom: none !important;
+    padding: 1.5rem 1rem !important;
+    position: relative !important;
+}
+
+/* Search Box Organic Design */
+.search-box {
+    border-radius: 30px !important;
+    border: 2px solid transparent !important;
+    background: linear-gradient(white, white) padding-box, var(--gradient-1) border-box !important;
+}
+
+/* Remove All Square Frames */
+.metric-card,
+.chart-container,
+.data-table,
+.section-card,
+.page-header,
+.btn {
+    border-radius: 20px !important;
+}
+
+/* Mobile Organic Adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        border-radius: 0 25px 25px 0;
+    }
+    
+    .topbar {
+        margin: 0 10px 10px 10px;
+        border-radius: 0 0 20px 20px;
+    }
+    
+    .side-panel {
+        top: 10px !important;
+        right: 10px !important;
+        width: calc(100vw - 20px) !important;
+        height: calc(100vh - 20px) !important;
+        border-radius: 20px !important;
     }
 }
