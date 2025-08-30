@@ -146,6 +146,9 @@ class StockManagementApp {
         // Check if DataStorage is available
         if (typeof DataStorage === 'undefined' || !DataStorage) {
             console.warn('DataStorage not yet available for notification count');
+            // Set default values while waiting
+            this.notificationBadge.textContent = '0';
+            this.notificationBadge.style.display = 'none';
             return;
         }
 

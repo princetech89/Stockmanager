@@ -35,6 +35,7 @@ class DashboardManager {
             this.setLoadingState(true);
             
             if (typeof DataStorage === 'undefined' || !DataStorage) {
+                console.log('DataStorage is not available, dashboard functionality will be limited');
                 throw new Error('DataStorage not available');
             }
             

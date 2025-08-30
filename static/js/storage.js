@@ -201,7 +201,7 @@ class DataStorage {
             const orders = JSON.parse(localStorage.getItem(this.storageKeys.orders) || '[]');
             const newOrder = {
                 id: Date.now(),
-                order_number: `ORD-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${orders.length + 1:04d}`,
+                order_number: `ORD-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${String(orders.length + 1).padStart(4, '0')}`,
                 ...orderData,
                 status: 'pending',
                 created_at: new Date().toISOString()
@@ -331,7 +331,7 @@ class DataStorage {
         const invoices = this.getInvoices();
         const newInvoice = {
             id: Date.now(),
-            invoice_number: `INV-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${invoices.length + 1:04d}`,
+            invoice_number: `INV-${new Date().toISOString().split('T')[0].replace(/-/g, '')}-${String(invoices.length + 1).padStart(4, '0')}`,
             ...invoiceData,
             created_at: new Date().toISOString()
         };
@@ -381,7 +381,95 @@ class DataStorage {
         const timestamp = Date.now().toString().slice(-4);
         return `${namePrefix}${categoryPrefix}${timestamp}`;
     }
+
+    // Dashboard Stats API
+    async getDashboardStats() {
+        try {
+            const response = await this.apiRequest('/dashboard-stats');
+            return response;
+        } catch (error) {
+            console.error('Failed to get dashboard stats from API, falling back to local data:', error);
+            // Fallback to local storage calculation
+            const products = this.getProducts();
+            const orders = this.getOrders('sales');
+            const currentMonth = new Date();
+            currentMonth.setDate(1);
+            
+            const monthlySales = orders.filter(order => 
+                new Date(order.created_at) >= currentMonth
+            ).length;
+
+            return {
+                total_products: products.length,
+                total_stock: products.reduce((sum, product) => sum + (product.available_qty || 0), 0),
+                low_stock_count: products.filter(product => 
+                    (product.available_qty || 0) <= (product.min_qty || 10)
+                ).length,
+                monthly_sales: monthlySales
+            };
+        }
+    }
+
+    // Sales Chart Data API
+    async getSalesChartData() {
+        try {
+            const response = await this.apiRequest('/sales-chart');
+            return response;
+        } catch (error) {
+            console.error('Failed to get sales chart data from API, using fallback:', error);
+            // Fallback to mock data for demonstration
+            const labels = [];
+            const data = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' }));
+                data.push(Math.random() * 1000); // Mock data
+            }
+            return { labels, data };
+        }
+    }
+
+    // Category Chart Data API
+    async getCategoryChartData() {
+        try {
+            const response = await this.apiRequest('/category-chart');
+            return response;
+        } catch (error) {
+            console.error('Failed to get category chart data from API, using local data:', error);
+            // Fallback to local storage data
+            const products = this.getProducts();
+            const categories = {};
+            
+            products.forEach(product => {
+                const category = product.category || 'Uncategorized';
+                categories[category] = (categories[category] || 0) + 1;
+            });
+
+            return {
+                labels: Object.keys(categories),
+                data: Object.values(categories)
+            };
+        }
+    }
+
+    // Products API
+    async getProducts() {
+        try {
+            const response = await this.apiRequest('/products');
+            this.saveProducts(response);
+            return response;
+        } catch (error) {
+            console.error('Failed to get products from API, using local storage:', error);
+            return JSON.parse(localStorage.getItem(this.storageKeys.products) || '[]');
+        }
+    }
 }
 
 // Create global instance
-window.DataStorage = new DataStorage();
+try {
+    window.DataStorage = new DataStorage();
+    console.log('DataStorage instance created successfully');
+} catch (error) {
+    console.error('Failed to create DataStorage instance:', error);
+}

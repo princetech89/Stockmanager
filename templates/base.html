@@ -120,6 +120,14 @@
 
     <!-- Base JavaScript -->
     <script src="{{ url_for('static', filename='js/storage.js') }}"></script>
+    <script>
+        // Ensure DataStorage is available before proceeding
+        if (typeof DataStorage === 'undefined') {
+            console.error('DataStorage not loaded properly');
+        } else {
+            console.log('DataStorage loaded successfully');
+        }
+    </script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     
     {% block scripts %}{% endblock %}
