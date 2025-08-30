@@ -512,6 +512,9 @@ class InventoryManager {
 
         // Set up form interactions
         this.setupFormInteractions();
+        
+        // Set up comprehensive auto-close listeners
+        this.setupAutoCloseListeners();
     }
 
     closeSidePanel() {
@@ -526,7 +529,109 @@ class InventoryManager {
             setTimeout(() => {
                 panel.remove();
                 backdrop.remove();
+                
+                // Clean up auto-close listeners
+                this.removeAutoCloseListeners();
             }, 400);
+        }
+        
+        this.isEditing = false;
+        this.currentProductId = null;
+    }
+
+    setupAutoCloseListeners() {
+        // ESC key listener - always works
+        this.escapeHandler = (e) => {
+            if (e.key === 'Escape' && document.querySelector('.side-panel')) {
+                this.closeSidePanel();
+            }
+        };
+        document.addEventListener('keydown', this.escapeHandler);
+
+        // Outside click listener - click anywhere outside panel
+        setTimeout(() => {
+            this.clickHandler = (e) => {
+                const panel = document.querySelector('.side-panel');
+                const backdrop = document.querySelector('.side-panel-backdrop');
+                
+                if (panel && (e.target === backdrop || (!panel.contains(e.target) && !e.target.closest('.side-panel')))) {
+                    this.closeSidePanel();
+                }
+            };
+            document.addEventListener('click', this.clickHandler, true);
+        }, 100); // Delay to prevent immediate closing
+
+        // Auto-close after form submission success
+        this.setupSuccessAutoClose();
+
+        // Auto-close on window resize (mobile orientation change)
+        this.resizeHandler = () => {
+            if (window.innerWidth <= 768) {
+                // Delay close on mobile to allow for orientation change
+                setTimeout(() => {
+                    if (document.querySelector('.side-panel')) {
+                        this.closeSidePanel();
+                    }
+                }, 100);
+            }
+        };
+        window.addEventListener('resize', this.resizeHandler);
+
+        // Auto-close after long inactivity (10 minutes)
+        this.resetInactivityTimer();
+        this.activityEvents = ['mousemove', 'keydown', 'scroll', 'click', 'touchstart'];
+        this.activityHandler = () => this.resetInactivityTimer();
+        
+        this.activityEvents.forEach(event => {
+            document.addEventListener(event, this.activityHandler);
+        });
+    }
+
+    setupSuccessAutoClose() {
+        // Close panel after successful operations
+        const originalSaveProduct = this.saveProduct.bind(this);
+        this.saveProduct = async function() {
+            const result = await originalSaveProduct();
+            if (result && result.success) {
+                // Auto-close after 2 seconds on success
+                setTimeout(() => {
+                    if (document.querySelector('.side-panel')) {
+                        this.closeSidePanel();
+                    }
+                }, 2000);
+            }
+            return result;
+        }.bind(this);
+    }
+
+    resetInactivityTimer() {
+        clearTimeout(this.inactivityTimer);
+        // Auto-close after 10 minutes of no activity
+        this.inactivityTimer = setTimeout(() => {
+            if (document.querySelector('.side-panel')) {
+                this.closeSidePanel();
+            }
+        }, 600000); // 10 minutes
+    }
+
+    removeAutoCloseListeners() {
+        // Remove all event listeners to prevent memory leaks
+        if (this.escapeHandler) {
+            document.removeEventListener('keydown', this.escapeHandler);
+        }
+        if (this.clickHandler) {
+            document.removeEventListener('click', this.clickHandler, true);
+        }
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
+        if (this.activityHandler && this.activityEvents) {
+            this.activityEvents.forEach(event => {
+                document.removeEventListener(event, this.activityHandler);
+            });
+        }
+        if (this.inactivityTimer) {
+            clearTimeout(this.inactivityTimer);
         }
     }
 
