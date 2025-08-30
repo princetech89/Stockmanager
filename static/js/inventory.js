@@ -379,10 +379,150 @@ class InventoryManager {
     }
 
     openAddProductModal() {
-        this.openAnimatedSidePanel();
+        this.openNewSidePanel();
     }
 
-    openAnimatedSidePanel() {
+    openNewSidePanel() {
+        console.log('Opening new side panel');
+        
+        // Remove existing panel if any
+        const existingOverlay = document.getElementById('panelOverlay');
+        if (existingOverlay) {
+            existingOverlay.remove();
+        }
+        
+        // Create new overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'panel-overlay';
+        overlay.id = 'panelOverlay';
+        
+        // Create new side panel
+        const panel = document.createElement('div');
+        panel.className = 'new-side-panel';
+        panel.id = 'newSidePanel';
+        panel.innerHTML = `
+            <div class="panel-header">
+                <h3>Add New Product</h3>
+                <button type="button" class="close-btn" id="closePanelBtn">×</button>
+            </div>
+            <div class="panel-body">
+                <form id="productForm" class="product-form">
+                    <div class="form-group">
+                        <label for="productName">Product Name *</label>
+                        <input type="text" id="productName" name="name" class="form-input" required placeholder="Enter product name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productSKU">SKU *</label>
+                        <input type="text" id="productSKU" name="sku" class="form-input" required readonly placeholder="Auto-generated">
+                        <small>Auto-generated based on name and category</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productCategory">Category *</label>
+                        <select id="productCategory" name="category" class="form-input" required>
+                            <option value="">Select Category</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Clothing">Clothing</option>
+                            <option value="Food">Food & Beverages</option>
+                            <option value="Books">Books</option>
+                            <option value="Home">Home & Garden</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Toys">Toys</option>
+                            <option value="Beauty">Beauty & Health</option>
+                            <option value="Automotive">Automotive</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="productPrice">Price (₹) *</label>
+                            <input type="number" id="productPrice" name="price" class="form-input" step="0.01" min="0" required placeholder="0.00">
+                        </div>
+                        <div class="form-group half-width">
+                            <label for="productStock">Stock Quantity *</label>
+                            <input type="number" id="productStock" name="stock" class="form-input" min="0" required placeholder="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="productMinStock">Minimum Stock</label>
+                            <input type="number" id="productMinStock" name="min_stock" class="form-input" min="0" value="10" placeholder="10">
+                        </div>
+                        <div class="form-group half-width">
+                            <label for="productUnit">Unit</label>
+                            <select id="productUnit" name="unit" class="form-input">
+                                <option value="pcs">Pieces</option>
+                                <option value="kg">Kilograms</option>
+                                <option value="ltr">Liters</option>
+                                <option value="mtr">Meters</option>
+                                <option value="box">Boxes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="productHSN">HSN Code</label>
+                            <input type="text" id="productHSN" name="hsn_code" class="form-input" placeholder="e.g., 85171200">
+                        </div>
+                        <div class="form-group half-width">
+                            <label for="productGST">GST Rate (%)</label>
+                            <select id="productGST" name="gst_rate" class="form-input">
+                                <option value="0">0% (Exempt)</option>
+                                <option value="5">5%</option>
+                                <option value="12">12%</option>
+                                <option value="18" selected>18%</option>
+                                <option value="28">28%</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" name="description" class="form-input" rows="3" placeholder="Product description (optional)"></textarea>
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="productActive" name="active" checked>
+                        <label for="productActive">Active Product</label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn-cancel" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn-save">Save Product</button>
+                    </div>
+                </form>
+            </div>
+        `;
+        
+        overlay.appendChild(panel);
+        document.body.appendChild(overlay);
+        
+        // Setup event listeners
+        this.setupNewPanelEvents();
+        
+        // Setup form interactions
+        this.setupNewFormInteractions();
+        
+        // Show panel with animation
+        setTimeout(() => {
+            overlay.classList.add('show');
+            panel.classList.add('show');
+        }, 10);
+        
+        // Focus first input
+        setTimeout(() => {
+            const firstInput = panel.querySelector('input[type="text"]');
+            if (firstInput) {
+                firstInput.focus();
+            }
+        }, 300);
+    }
+
+    oldOpenAnimatedSidePanel() {
         // Remove existing panels
         const existing = document.querySelector('.side-panel');
         if (existing) {
@@ -522,6 +662,16 @@ class InventoryManager {
     }
 
     closeSidePanel() {
+        console.log('Closing any side panel (fallback)');
+        
+        // Try closing new panel first
+        const newPanel = document.getElementById('newSidePanel');
+        if (newPanel) {
+            this.closeNewSidePanel();
+            return;
+        }
+        
+        // Fallback to old panel system
         const panel = document.querySelector('.side-panel');
         const backdrop = document.querySelector('.side-panel-backdrop');
         
@@ -543,32 +693,164 @@ class InventoryManager {
         this.currentProductId = null;
     }
 
-    setupAutoCloseListeners() {
-        // ESC key listener - always works
-        this.escapeHandler = (e) => {
+    setupNewPanelEvents() {
+        // Close button
+        const closeBtn = document.getElementById('closePanelBtn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                console.log('Close button clicked');
+                this.closeNewSidePanel();
+            });
+        }
+        
+        // Cancel button
+        const cancelBtn = document.getElementById('cancelBtn');
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', () => {
+                console.log('Cancel button clicked');
+                this.closeNewSidePanel();
+            });
+        }
+        
+        // ESC key
+        this.newEscHandler = (e) => {
             if (e.key === 'Escape') {
-                console.log('ESC pressed - closing panel');
-                this.closeSidePanel();
+                console.log('ESC pressed - closing new panel');
+                this.closeNewSidePanel();
             }
         };
-        document.addEventListener('keydown', this.escapeHandler);
-
-        // Outside click listener - simplified and reliable
-        setTimeout(() => {
-            this.clickHandler = (e) => {
-                const panel = document.querySelector('.side-panel');
-                const backdrop = document.querySelector('.side-panel-backdrop');
-                
-                // If panel exists and click is not inside panel
-                if (panel && !panel.contains(e.target)) {
-                    console.log('Click outside panel - closing');
-                    this.closeSidePanel();
-                    e.preventDefault();
-                    e.stopPropagation();
+        document.addEventListener('keydown', this.newEscHandler);
+        
+        // Overlay click (outside panel)
+        const overlay = document.getElementById('panelOverlay');
+        if (overlay) {
+            this.newOverlayClickHandler = (e) => {
+                if (e.target === overlay) {
+                    console.log('Overlay clicked - closing new panel');
+                    this.closeNewSidePanel();
                 }
             };
-            document.addEventListener('click', this.clickHandler, true);
-        }, 300);
+            overlay.addEventListener('click', this.newOverlayClickHandler);
+        }
+        
+        // Form submit
+        const form = document.getElementById('productForm');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                console.log('Form submitted - saving product');
+                this.saveNewProduct();
+            });
+        }
+    }
+
+    closeNewSidePanel() {
+        console.log('Closing new side panel');
+        
+        const overlay = document.getElementById('panelOverlay');
+        const panel = document.getElementById('newSidePanel');
+        
+        if (overlay && panel) {
+            overlay.classList.remove('show');
+            panel.classList.remove('show');
+            
+            setTimeout(() => {
+                if (overlay && overlay.parentNode) {
+                    overlay.remove();
+                }
+            }, 300);
+        }
+        
+        // Clean up event listeners
+        this.removeNewPanelEvents();
+        
+        // Reset form state
+        this.isEditing = false;
+        this.currentProductId = null;
+    }
+
+    removeNewPanelEvents() {
+        if (this.newEscHandler) {
+            document.removeEventListener('keydown', this.newEscHandler);
+            this.newEscHandler = null;
+        }
+        if (this.newOverlayClickHandler) {
+            const overlay = document.getElementById('panelOverlay');
+            if (overlay) {
+                overlay.removeEventListener('click', this.newOverlayClickHandler);
+            }
+            this.newOverlayClickHandler = null;
+        }
+        console.log('New panel events removed');
+    }
+
+    setupNewFormInteractions() {
+        // Auto-generate SKU when name or category changes
+        const nameField = document.getElementById('productName');
+        const categoryField = document.getElementById('productCategory');
+        const skuField = document.getElementById('productSKU');
+        
+        const generateSKU = () => {
+            const name = nameField.value.trim();
+            const category = categoryField.value;
+            
+            if (name && category) {
+                const namePrefix = name.substring(0, 3).toUpperCase();
+                const categoryPrefix = category.substring(0, 2).toUpperCase();
+                const randomNum = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+                skuField.value = `${categoryPrefix}-${namePrefix}-${randomNum}`;
+            }
+        };
+        
+        if (nameField && categoryField) {
+            nameField.addEventListener('blur', generateSKU);
+            categoryField.addEventListener('change', generateSKU);
+        }
+    }
+
+    saveNewProduct() {
+        const form = document.getElementById('productForm');
+        const formData = new FormData(form);
+        
+        const productData = {
+            name: formData.get('name'),
+            sku: formData.get('sku'),
+            category: formData.get('category'),
+            price: parseFloat(formData.get('price')),
+            stock: parseInt(formData.get('stock')),
+            min_stock: parseInt(formData.get('min_stock')) || 10,
+            unit: formData.get('unit') || 'pcs',
+            hsn_code: formData.get('hsn_code') || '',
+            gst_rate: parseFloat(formData.get('gst_rate')) || 18,
+            description: formData.get('description') || '',
+            active: document.getElementById('productActive').checked
+        };
+        
+        console.log('Saving product:', productData);
+        
+        // Validate required fields
+        if (!productData.name || !productData.sku || !productData.category || !productData.price) {
+            alert('Please fill in all required fields');
+            return;
+        }
+        
+        try {
+            // Add to data storage
+            this.dataStorage.createProduct(productData);
+            
+            // Close panel
+            this.closeNewSidePanel();
+            
+            // Refresh inventory
+            this.loadProducts();
+            
+            // Show success message
+            this.showNotification('Product added successfully!', 'success');
+            
+        } catch (error) {
+            console.error('Error saving product:', error);
+            this.showNotification('Error saving product. Please try again.', 'error');
+        }
     }
 
     setupSuccessAutoClose() {
