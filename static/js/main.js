@@ -124,7 +124,6 @@ class StockManagementApp {
         
         resetInactivityTimer(); // Initialize timer
     }
-    }
 
     toggleSidebar() {
         this.sidebar.classList.toggle('collapsed');
