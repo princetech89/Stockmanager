@@ -396,7 +396,12 @@ class InventoryManager {
         // Create backdrop
         const backdrop = document.createElement('div');
         backdrop.className = 'side-panel-backdrop';
-        backdrop.onclick = () => this.closeSidePanel();
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop) {
+                console.log('Backdrop direct click - closing panel');
+                this.closeSidePanel();
+            }
+        });
         document.body.appendChild(backdrop);
 
         // Create side panel
@@ -554,12 +559,21 @@ class InventoryManager {
                 const panel = document.querySelector('.side-panel');
                 const backdrop = document.querySelector('.side-panel-backdrop');
                 
-                if (panel && (e.target === backdrop || (!panel.contains(e.target) && !e.target.closest('.side-panel')))) {
+                // Check if click is on backdrop or outside panel
+                if (backdrop && e.target === backdrop) {
+                    console.log('Backdrop clicked - closing panel');
+                    this.closeSidePanel();
+                    return;
+                }
+                
+                // Check if click is outside panel
+                if (panel && !panel.contains(e.target)) {
+                    console.log('Outside panel clicked - closing panel');
                     this.closeSidePanel();
                 }
             };
-            document.addEventListener('click', this.clickHandler, true);
-        }, 100); // Delay to prevent immediate closing
+            document.addEventListener('click', this.clickHandler);
+        }, 200); // Delay to prevent immediate closing
 
         // Auto-close after form submission success
         this.setupSuccessAutoClose();
@@ -620,7 +634,7 @@ class InventoryManager {
             document.removeEventListener('keydown', this.escapeHandler);
         }
         if (this.clickHandler) {
-            document.removeEventListener('click', this.clickHandler, true);
+            document.removeEventListener('click', this.clickHandler);
         }
         if (this.resizeHandler) {
             window.removeEventListener('resize', this.resizeHandler);

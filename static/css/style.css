@@ -3105,3 +3105,157 @@ body::after {
     border-radius: 20px !important;
     backdrop-filter: blur(10px) !important;
 }
+
+/* Fix Text Visibility on Glassmorphism Background */
+:root {
+    --text-primary: rgba(0, 0, 0, 0.9) !important;
+    --text-secondary: rgba(0, 0, 0, 0.7) !important;
+    --text-tertiary: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Dark text for better visibility */
+body, .main-content, .page-content {
+    color: var(--text-primary) !important;
+}
+
+.page-title {
+    color: rgba(0, 0, 0, 0.9) !important;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8) !important;
+    background: none !important;
+    -webkit-text-fill-color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.metric-value {
+    color: rgba(0, 0, 0, 0.9) !important;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8) !important;
+}
+
+.metric-label {
+    color: rgba(0, 0, 0, 0.7) !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    text-shadow: none !important;
+}
+
+/* Sidebar text visibility */
+.sidebar {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.nav-text, .logo-text {
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Button text visibility */
+.btn {
+    color: rgba(0, 0, 0, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-primary {
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Chart text visibility */
+canvas {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 15px !important;
+}
+
+/* Form text visibility */
+.form-control, .form-select {
+    color: rgba(0, 0, 0, 0.9) !important;
+    background: rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+.form-control::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Table text visibility */
+.data-table {
+    color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.data-table th {
+    color: rgba(0, 0, 0, 0.9) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.data-table td {
+    color: rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Search box text */
+.search-box input {
+    color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.search-box input::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Chart container headers */
+.chart-header h3 {
+    color: rgba(0, 0, 0, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Enhanced Side Panel Backdrop */
+.side-panel-backdrop {
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(5px) !important;
+    cursor: pointer !important;
+    z-index: 999 !important;
+}
+
+.side-panel-backdrop.active {
+    opacity: 1 !important;
+}
+
+/* Side Panel Text Visibility */
+.side-panel {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    color: rgba(0, 0, 0, 0.9) !important;
+    border-left: 2px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.side-panel-header {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.side-panel-title {
+    color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.side-panel label {
+    color: rgba(0, 0, 0, 0.8) !important;
+    font-weight: 600 !important;
+}
+
+.side-panel .form-control {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.side-panel .btn {
+    color: rgba(0, 0, 0, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.2) !important;
+}
+
+.side-panel .btn-primary {
+    background: rgba(59, 130, 246, 0.8) !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(59, 130, 246, 0.9) !important;
+}
+
+/* Visual indicator for interactive elements */
+.side-panel-backdrop:hover {
+    background: rgba(0, 0, 0, 0.6) !important;
+}
