@@ -1,5 +1,6 @@
 from flask import render_template, request, jsonify, redirect, url_for
-from app import app, db
+from app import app
+from database import db
 from models import Product, Stock, Order, OrderItem, Supplier, ProductBatch, Customer, CreditTransaction, GSTState
 from datetime import datetime, timedelta
 from sqlalchemy import func, extract, desc

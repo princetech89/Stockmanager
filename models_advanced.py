@@ -1,5 +1,5 @@
 # Advanced Models for Enterprise Features
-from models import db
+from database import db
 from datetime import datetime
 from sqlalchemy import func
 

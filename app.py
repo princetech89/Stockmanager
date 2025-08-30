@@ -2,7 +2,7 @@ import os
 import logging
 from flask import Flask, render_template, request, jsonify
 from werkzeug.middleware.proxy_fix import ProxyFix
-from models import db
+from database import db
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
