@@ -1,0 +1,157 @@
+🏪 Stock Inventory Management Website (for India)
+1. Flowchart (System Flow)
+
+Here’s a high-level flow:
+
+          ┌─────────────────────┐
+          │   User / Admin      │
+          └───────┬─────────────┘
+                  │
+       ┌──────────▼──────────┐
+       │  Login / Signup     │
+       │ (Mobile OTP / Email)│
+       └──────────┬──────────┘
+                  │
+        ┌─────────▼──────────┐
+        │  Dashboard (Role)  │
+        │  - Admin           │
+        │  - Staff           │
+        │  - Customer (opt.) │
+        └─────────┬──────────┘
+                  │
+   ┌──────────────┼─────────────────┐
+   │              │                 │
+┌──▼───┐    ┌─────▼─────┐     ┌─────▼─────┐
+│Stock │    │  Orders   │     │  Reports  │
+│Mgmt  │    │  Mgmt     │     │  & GST    │
+└──┬───┘    └─────┬─────┘     └─────┬─────┘
+   │              │                 │
+┌──▼───────┐  ┌───▼─────────┐  ┌────▼─────────┐
+│Add/Update│  │Sales /       │  │Daily/Monthly │
+│Products  │  │Purchase      │  │Reports (CSV, │
+│Qty/Price │  │Invoices (GST)│  │Excel, PDF)   │
+└────┬─────┘  └────┬────────┘  └────┬─────────┘
+     │             │                │
+┌────▼─────┐  ┌────▼─────┐     ┌────▼──────────┐
+│Low Stock │  │Billing & │     │Tax / Tally    │
+│Alerts    │  │Receipts  │     │Integration    │
+└──────────┘  └──────────┘     └───────────────┘
+
+2. Components of the Application
+🔹 Frontend (Website UI)
+
+Dashboard (Role-based UI)
+
+Admin Panel → Inventory control, reports, users
+
+Staff Panel → Add stock, billing
+
+Customer Panel (Optional) → Check availability, order online
+
+Modules
+
+Login/Signup (Mobile OTP via SMS – e.g., Twilio / Indian providers like Textlocal, MSG91)
+
+Product Catalog → Product name, SKU, HSN Code (for GST), category
+
+Stock Management → Add / Update / Delete items
+
+Order Management → Sales / Purchase
+
+Billing → GST-compliant invoices (PDF export)
+
+Reports & Analytics
+
+Daily/Monthly sales
+
+Low-stock alerts
+
+Profit/Loss analysis
+
+🔹 Backend
+
+Authentication
+
+OTP (mobile, India-specific providers like MSG91)
+
+Role-based access (Admin, Staff, Customer)
+
+Inventory API
+
+CRUD for products
+
+Stock adjustment (in/out)
+
+Order API
+
+Purchase orders
+
+Sales orders
+
+Returns handling
+
+Billing
+
+GST calculation (5%, 12%, 18%, 28%)
+
+Invoice number auto-generation
+
+Reports
+
+Export in CSV, Excel, PDF
+
+Notification System
+
+Low-stock alerts (email/SMS)
+
+Payment reminders
+
+Localization
+
+Indian Rupee (₹)
+
+GST fields (CGST, SGST, IGST)
+
+🔹 Database (SQL/NoSQL)
+
+Tables Needed:
+
+Users (Admin, Staff, Customers)
+
+Products (ID, Name, SKU, HSN, Category, Unit Price, Tax%)
+
+Stock (ProductID, AvailableQty, MinQty)
+
+Orders (OrderID, CustomerID, ProductID, Qty, TotalPrice, GST%)
+
+Suppliers (Vendor Info)
+
+Transactions (Payments, mode: Cash, UPI, Card, etc.)
+
+Reports (Aggregated Data)
+
+🔹 Tech Stack (Recommended)
+
+Frontend: ReactJS / NextJS + TailwindCSS
+
+Backend: Node.js (Express) / Django REST API
+
+Database: PostgreSQL or MongoDB
+
+Hosting: AWS / Render / Vercel
+
+Authentication: Firebase Auth (or custom OTP via Indian SMS providers)
+
+Payments (Optional): Razorpay / Paytm / UPI
+
+🔹 Extra Features (India Specific)
+
+GST-compliant invoice generation
+
+UPI/QR Code payment option
+
+Hindi/regional language support (multi-lingual UI)
+
+Tally/Zoho integration for accounting
+
+Barcode/QR Code scanner for stock updates
