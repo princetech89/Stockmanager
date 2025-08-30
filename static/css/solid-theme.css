@@ -1,0 +1,259 @@
+/* Solid Theme - No Transparency */
+:root {
+    /* Solid Color Variables */
+    --solid-bg-primary: #ffffff;
+    --solid-bg-secondary: #f8fafc;
+    --solid-bg-tertiary: #f1f5f9;
+    --solid-border: #e2e8f0;
+    --solid-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --accent-primary: #3b82f6;
+    --accent-secondary: #6366f1;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+}
+
+/* Remove Animated Background */
+.dashboard-background {
+    display: none;
+}
+
+/* Solid Sidebar */
+.sidebar {
+    background: var(--solid-bg-primary);
+    border-right: 2px solid var(--solid-border);
+    border-radius: 0;
+    box-shadow: var(--solid-shadow);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.sidebar-header .logo {
+    background: var(--solid-bg-secondary);
+    border: 1px solid var(--solid-border);
+    backdrop-filter: none;
+}
+
+.nav-link {
+    background: transparent;
+    backdrop-filter: none;
+}
+
+.nav-link:hover {
+    background: var(--solid-bg-secondary);
+    border: 1px solid var(--solid-border);
+    backdrop-filter: none;
+}
+
+.nav-link.active {
+    background: var(--accent-primary);
+    color: white;
+    border: 1px solid var(--accent-primary);
+    backdrop-filter: none;
+}
+
+/* Solid Topbar */
+.topbar {
+    background: var(--solid-bg-primary);
+    border-bottom: 2px solid var(--solid-border);
+    border-radius: 0;
+    box-shadow: var(--solid-shadow);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.search-box {
+    background: var(--solid-bg-secondary);
+    border: 1px solid var(--solid-border);
+    backdrop-filter: none;
+}
+
+.search-box:focus-within {
+    background: var(--solid-bg-primary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Solid Cards */
+.metric-card {
+    background: var(--solid-bg-primary);
+    border: 2px solid var(--solid-border);
+    border-radius: 12px;
+    box-shadow: var(--solid-shadow);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.metric-card:nth-child(1) {
+    background: var(--solid-bg-primary);
+    border-color: var(--accent-primary);
+}
+
+.metric-card:nth-child(2) {
+    background: var(--solid-bg-primary);
+    border-color: #06b6d4;
+}
+
+.metric-card:nth-child(3) {
+    background: var(--solid-bg-primary);
+    border-color: #ef4444;
+}
+
+.metric-card:nth-child(4) {
+    background: var(--solid-bg-primary);
+    border-color: #10b981;
+}
+
+.metric-card:hover {
+    background: var(--solid-bg-secondary);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Solid Data Tables */
+.data-table {
+    background: var(--solid-bg-primary);
+    border: 2px solid var(--solid-border);
+    border-radius: 12px;
+    box-shadow: var(--solid-shadow);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.data-table thead {
+    background: var(--solid-bg-secondary);
+    backdrop-filter: none;
+}
+
+.data-table tbody tr:hover {
+    background: var(--solid-bg-tertiary);
+}
+
+/* Solid Chart Containers */
+.chart-container {
+    background: var(--solid-bg-primary);
+    border: 2px solid var(--solid-border);
+    border-radius: 12px;
+    box-shadow: var(--solid-shadow);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.chart-container::before {
+    display: none;
+}
+
+/* Solid Buttons */
+.btn {
+    backdrop-filter: none;
+    border-radius: 8px;
+}
+
+.btn-primary {
+    background: var(--accent-primary);
+    border: 1px solid var(--accent-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--accent-secondary);
+    border-color: var(--accent-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Remove Glass Effects */
+.btn::before {
+    display: none;
+}
+
+.metric-card::after {
+    display: none;
+}
+
+.metric-card::before {
+    display: none;
+}
+
+/* Solid Page Content */
+.page-content {
+    background: var(--solid-bg-secondary);
+}
+
+.main-content {
+    background: var(--solid-bg-secondary);
+}
+
+/* Solid Section Cards */
+.section-card {
+    background: var(--solid-bg-primary);
+    border: 2px solid var(--solid-border);
+    border-radius: 12px;
+    box-shadow: var(--solid-shadow);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* Remove Morphing and Glass Labels */
+.metric-label {
+    background: var(--solid-bg-secondary);
+    border: 1px solid var(--solid-border);
+    backdrop-filter: none;
+    color: var(--text-secondary);
+}
+
+.table-container {
+    background: var(--solid-bg-primary);
+    border: 2px solid var(--solid-border);
+    backdrop-filter: none;
+}
+
+.pill-row {
+    background: var(--solid-bg-secondary);
+    border: 1px solid var(--solid-border);
+    backdrop-filter: none;
+}
+
+.pill-row:hover {
+    background: var(--solid-bg-tertiary);
+}
+
+/* Remove Glow Effects */
+.glow-effect {
+    animation: none;
+}
+
+/* Solid Typography */
+.page-title {
+    color: var(--text-primary);
+    text-shadow: none;
+    background: none;
+    -webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;
+}
+
+.metric-value {
+    color: var(--text-primary);
+    text-shadow: none;
+}
+
+/* Remove Gradient Blobs */
+.gradient-blob {
+    display: none;
+}
+
+/* Override Body Background */
+body {
+    background: var(--solid-bg-secondary);
+}
+
+/* Clean Dark Mode Alternative */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --solid-bg-primary: #1e293b;
+        --solid-bg-secondary: #334155;
+        --solid-bg-tertiary: #475569;
+        --solid-border: #64748b;
+        --text-primary: #f8fafc;
+        --text-secondary: #cbd5e1;
+    }
+}
