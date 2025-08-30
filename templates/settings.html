@@ -1,0 +1,502 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Stock Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Settings</h1>
+</div>
+
+<!-- Settings Tabs -->
+<div class="settings-container">
+    <div class="settings-nav">
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchSettingsTab('general')" id="generalTab">
+                <i class="fas fa-cog"></i>
+                General
+            </button>
+            <button class="tab-btn" onclick="switchSettingsTab('business')" id="businessTab">
+                <i class="fas fa-building"></i>
+                Business Info
+            </button>
+            <button class="tab-btn" onclick="switchSettingsTab('gst')" id="gstTab">
+                <i class="fas fa-receipt"></i>
+                GST Settings
+            </button>
+            <button class="tab-btn" onclick="switchSettingsTab('users')" id="usersTab">
+                <i class="fas fa-users"></i>
+                Users
+            </button>
+            <button class="tab-btn" onclick="switchSettingsTab('backup')" id="backupTab">
+                <i class="fas fa-database"></i>
+                Backup
+            </button>
+        </div>
+    </div>
+
+    <div class="settings-content">
+        <!-- General Settings -->
+        <div class="tab-content active" id="generalContent">
+            <div class="settings-card">
+                <div class="card-header">
+                    <h3>General Settings</h3>
+                </div>
+                <div class="card-body">
+                    <form id="generalSettingsForm">
+                        <div class="form-group">
+                            <label for="appName">Application Name</label>
+                            <input type="text" class="form-control" id="appName" value="Stock Management System">
+                        </div>
+                        <div class="form-group">
+                            <label for="currency">Currency</label>
+                            <select class="form-control" id="currency">
+                                <option value="INR">Indian Rupee (₹)</option>
+                                <option value="USD">US Dollar ($)</option>
+                                <option value="EUR">Euro (€)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateFormat">Date Format</label>
+                            <select class="form-control" id="dateFormat">
+                                <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="lowStockThreshold">Default Low Stock Threshold</label>
+                            <input type="number" class="form-control" id="lowStockThreshold" value="10">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Business Info -->
+        <div class="tab-content" id="businessContent">
+            <div class="settings-card">
+                <div class="card-header">
+                    <h3>Business Information</h3>
+                </div>
+                <div class="card-body">
+                    <form id="businessInfoForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="businessName">Business Name *</label>
+                                <input type="text" class="form-control" id="businessName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="businessType">Business Type</label>
+                                <select class="form-control" id="businessType">
+                                    <option value="retail">Retail</option>
+                                    <option value="wholesale">Wholesale</option>
+                                    <option value="manufacturing">Manufacturing</option>
+                                    <option value="services">Services</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="businessAddress">Address</label>
+                            <textarea class="form-control" id="businessAddress" rows="3"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="businessPhone">Phone</label>
+                                <input type="tel" class="form-control" id="businessPhone">
+                            </div>
+                            <div class="form-group">
+                                <label for="businessEmail">Email</label>
+                                <input type="email" class="form-control" id="businessEmail">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="businessWebsite">Website</label>
+                                <input type="url" class="form-control" id="businessWebsite">
+                            </div>
+                            <div class="form-group">
+                                <label for="businessLogo">Logo URL</label>
+                                <input type="url" class="form-control" id="businessLogo">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Save Business Info
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- GST Settings -->
+        <div class="tab-content" id="gstContent">
+            <div class="settings-card">
+                <div class="card-header">
+                    <h3>GST Configuration</h3>
+                </div>
+                <div class="card-body">
+                    <form id="gstSettingsForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="gstNumber">GST Number *</label>
+                                <input type="text" class="form-control" id="gstNumber" placeholder="22AAAAA0000A1Z5" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="stateCode">State Code</label>
+                                <select class="form-control" id="stateCode">
+                                    <option value="01">01 - Jammu and Kashmir</option>
+                                    <option value="02">02 - Himachal Pradesh</option>
+                                    <option value="03">03 - Punjab</option>
+                                    <option value="04">04 - Chandigarh</option>
+                                    <option value="05">05 - Uttarakhand</option>
+                                    <option value="06">06 - Haryana</option>
+                                    <option value="07">07 - Delhi</option>
+                                    <option value="08">08 - Rajasthan</option>
+                                    <option value="09">09 - Uttar Pradesh</option>
+                                    <option value="10">10 - Bihar</option>
+                                    <option value="11">11 - Sikkim</option>
+                                    <option value="12">12 - Arunachal Pradesh</option>
+                                    <option value="13">13 - Nagaland</option>
+                                    <option value="14">14 - Manipur</option>
+                                    <option value="15">15 - Mizoram</option>
+                                    <option value="16">16 - Tripura</option>
+                                    <option value="17">17 - Meghalaya</option>
+                                    <option value="18">18 - Assam</option>
+                                    <option value="19">19 - West Bengal</option>
+                                    <option value="20">20 - Jharkhand</option>
+                                    <option value="21">21 - Odisha</option>
+                                    <option value="22">22 - Chhattisgarh</option>
+                                    <option value="23">23 - Madhya Pradesh</option>
+                                    <option value="24">24 - Gujarat</option>
+                                    <option value="27">27 - Maharashtra</option>
+                                    <option value="29">29 - Karnataka</option>
+                                    <option value="32">32 - Kerala</option>
+                                    <option value="33">33 - Tamil Nadu</option>
+                                    <option value="34">34 - Puducherry</option>
+                                    <option value="35">35 - Andaman and Nicobar Islands</option>
+                                    <option value="36">36 - Telangana</option>
+                                    <option value="37">37 - Andhra Pradesh</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h4>Default GST Rates</h4>
+                            <div class="gst-rates-grid">
+                                <div class="form-group">
+                                    <label for="gstRate1">GST Rate 1 (%)</label>
+                                    <input type="number" class="form-control" id="gstRate1" value="5" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gstRate2">GST Rate 2 (%)</label>
+                                    <input type="number" class="form-control" id="gstRate2" value="12" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gstRate3">GST Rate 3 (%)</label>
+                                    <input type="number" class="form-control" id="gstRate3" value="18" step="0.01">
+                                </div>
+                                <div class="form-group">
+                                    <label for="gstRate4">GST Rate 4 (%)</label>
+                                    <input type="number" class="form-control" id="gstRate4" value="28" step="0.01">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Save GST Settings
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Management -->
+        <div class="tab-content" id="usersContent">
+            <div class="settings-card">
+                <div class="card-header">
+                    <h3>User Management</h3>
+                    <button class="btn btn-primary" onclick="openAddUserModal()">
+                        <i class="fas fa-plus"></i>
+                        Add User
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table class="data-table" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <!-- Users will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Backup Settings -->
+        <div class="tab-content" id="backupContent">
+            <div class="settings-card">
+                <div class="card-header">
+                    <h3>Data Backup & Export</h3>
+                </div>
+                <div class="card-body">
+                    <div class="backup-section">
+                        <h4>Export Data</h4>
+                        <p>Export your data for backup or migration purposes.</p>
+                        <div class="backup-actions">
+                            <button class="btn btn-outline" onclick="exportAllData()">
+                                <i class="fas fa-download"></i>
+                                Export All Data (JSON)
+                            </button>
+                            <button class="btn btn-outline" onclick="exportInventoryData()">
+                                <i class="fas fa-boxes"></i>
+                                Export Inventory Only
+                            </button>
+                            <button class="btn btn-outline" onclick="exportOrdersData()">
+                                <i class="fas fa-shopping-cart"></i>
+                                Export Orders Only
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="backup-section">
+                        <h4>Import Data</h4>
+                        <p>Import data from a backup file. <strong>Warning:</strong> This will overwrite existing data.</p>
+                        <div class="import-actions">
+                            <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData()">
+                            <button class="btn btn-warning" onclick="document.getElementById('importFile').click()">
+                                <i class="fas fa-upload"></i>
+                                Import Data
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="backup-section">
+                        <h4>Reset Data</h4>
+                        <p><strong>Danger Zone:</strong> This will permanently delete all data.</p>
+                        <button class="btn btn-danger" onclick="confirmResetData()">
+                            <i class="fas fa-trash"></i>
+                            Reset All Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Settings JavaScript will be included here
+let currentSettingsTab = 'general';
+
+function switchSettingsTab(tabName) {
+    // Hide all content
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // Remove active class from all tabs
+    document.querySelectorAll('.tab-btn').forEach(tab => {
+        tab.classList.remove('active');
+    });
+    
+    // Show selected content and activate tab
+    document.getElementById(tabName + 'Content').classList.add('active');
+    document.getElementById(tabName + 'Tab').classList.add('active');
+    
+    currentSettingsTab = tabName;
+}
+
+// Load settings from localStorage
+function loadSettings() {
+    const settings = DataStorage.getSettings();
+    
+    if (settings.general) {
+        document.getElementById('appName').value = settings.general.appName || 'Stock Management System';
+        document.getElementById('currency').value = settings.general.currency || 'INR';
+        document.getElementById('dateFormat').value = settings.general.dateFormat || 'DD/MM/YYYY';
+        document.getElementById('lowStockThreshold').value = settings.general.lowStockThreshold || 10;
+    }
+    
+    if (settings.business) {
+        document.getElementById('businessName').value = settings.business.name || '';
+        document.getElementById('businessType').value = settings.business.type || 'retail';
+        document.getElementById('businessAddress').value = settings.business.address || '';
+        document.getElementById('businessPhone').value = settings.business.phone || '';
+        document.getElementById('businessEmail').value = settings.business.email || '';
+        document.getElementById('businessWebsite').value = settings.business.website || '';
+        document.getElementById('businessLogo').value = settings.business.logo || '';
+    }
+    
+    if (settings.gst) {
+        document.getElementById('gstNumber').value = settings.gst.number || '';
+        document.getElementById('stateCode').value = settings.gst.stateCode || '07';
+        document.getElementById('gstRate1').value = settings.gst.rates?.rate1 || 5;
+        document.getElementById('gstRate2').value = settings.gst.rates?.rate2 || 12;
+        document.getElementById('gstRate3').value = settings.gst.rates?.rate3 || 18;
+        document.getElementById('gstRate4').value = settings.gst.rates?.rate4 || 28;
+    }
+}
+
+// Save general settings
+document.getElementById('generalSettingsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const settings = DataStorage.getSettings();
+    settings.general = {
+        appName: document.getElementById('appName').value,
+        currency: document.getElementById('currency').value,
+        dateFormat: document.getElementById('dateFormat').value,
+        lowStockThreshold: parseInt(document.getElementById('lowStockThreshold').value)
+    };
+    
+    DataStorage.saveSettings(settings);
+    showNotification('General settings saved successfully', 'success');
+});
+
+// Save business info
+document.getElementById('businessInfoForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const settings = DataStorage.getSettings();
+    settings.business = {
+        name: document.getElementById('businessName').value,
+        type: document.getElementById('businessType').value,
+        address: document.getElementById('businessAddress').value,
+        phone: document.getElementById('businessPhone').value,
+        email: document.getElementById('businessEmail').value,
+        website: document.getElementById('businessWebsite').value,
+        logo: document.getElementById('businessLogo').value
+    };
+    
+    DataStorage.saveSettings(settings);
+    showNotification('Business information saved successfully', 'success');
+});
+
+// Save GST settings
+document.getElementById('gstSettingsForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const settings = DataStorage.getSettings();
+    settings.gst = {
+        number: document.getElementById('gstNumber').value,
+        stateCode: document.getElementById('stateCode').value,
+        rates: {
+            rate1: parseFloat(document.getElementById('gstRate1').value),
+            rate2: parseFloat(document.getElementById('gstRate2').value),
+            rate3: parseFloat(document.getElementById('gstRate3').value),
+            rate4: parseFloat(document.getElementById('gstRate4').value)
+        }
+    };
+    
+    DataStorage.saveSettings(settings);
+    showNotification('GST settings saved successfully', 'success');
+});
+
+// Export/Import functions
+function exportAllData() {
+    const data = {
+        products: DataStorage.getProducts(),
+        orders: DataStorage.getOrders(),
+        settings: DataStorage.getSettings(),
+        exportDate: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `inventory_backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function exportInventoryData() {
+    const data = {
+        products: DataStorage.getProducts(),
+        exportDate: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `inventory_products_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function exportOrdersData() {
+    const data = {
+        orders: DataStorage.getOrders(),
+        exportDate: new Date().toISOString()
+    };
+    
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `inventory_orders_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+function importData() {
+    const file = document.getElementById('importFile').files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            
+            if (confirm('This will overwrite all existing data. Are you sure?')) {
+                if (data.products) DataStorage.saveProducts(data.products);
+                if (data.orders) DataStorage.saveOrders(data.orders);
+                if (data.settings) DataStorage.saveSettings(data.settings);
+                
+                showNotification('Data imported successfully', 'success');
+                location.reload();
+            }
+        } catch (error) {
+            showNotification('Error importing data: Invalid file format', 'error');
+        }
+    };
+    reader.readAsText(file);
+}
+
+function confirmResetData() {
+    if (confirm('This will permanently delete all data. This action cannot be undone. Are you sure?')) {
+        if (confirm('Last warning: This will delete ALL products, orders, and settings. Continue?')) {
+            localStorage.clear();
+            showNotification('All data has been reset', 'success');
+            location.reload();
+        }
+    }
+}
+
+// Initialize settings page
+document.addEventListener('DOMContentLoaded', function() {
+    loadSettings();
+});
+</script>
+{% endblock %}
