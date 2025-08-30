@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import func, extract, desc
 import json
 import qrcode
+# QR code imports handled by qrcode library directly
 import io
 import base64
 import calendar
@@ -107,7 +108,11 @@ def generate_upi_qr(amount, business_name, order_number):
     # UPI URL format: upi://pay?pa=UPI_ID&pn=NAME&am=AMOUNT&cu=INR&tn=DESCRIPTION
     upi_url = f"upi://pay?pa=merchant@upi&pn={business_name}&am={amount}&cu=INR&tn=Invoice {order_number}"
     
-    qr = qrcode.QRCode(version=1, box_size=6, border=5)
+    qr = qrcode.QRCode(
+        version=1,
+        box_size=6,
+        border=5
+    )
     qr.add_data(upi_url)
     qr.make(fit=True)
     
@@ -174,25 +179,23 @@ def handle_products():
             data = request.get_json()
             
             # Create new product
-            product = Product(
-                name=data['name'],
-                sku=data['sku'],
-                hsn_code=data['hsn_code'],
-                category=data['category'],
-                unit_price=float(data['unit_price']),
-                gst_rate=float(data['gst_rate']),
-                description=data.get('description', '')
-            )
+            product = Product()
+            product.name = data['name']
+            product.sku = data['sku']
+            product.hsn_code = data['hsn_code']
+            product.category = data['category']
+            product.unit_price = float(data['unit_price'])
+            product.gst_rate = float(data['gst_rate'])
+            product.description = data.get('description', '')
             
             db.session.add(product)
             db.session.flush()  # To get the product ID
             
             # Create stock entry
-            stock = Stock(
-                product_id=product.id,
-                available_qty=int(data.get('available_qty', 0)),
-                min_qty=int(data.get('min_qty', 10))
-            )
+            stock = Stock()
+            stock.product_id = product.id
+            stock.available_qty = int(data.get('available_qty', 0))
+            stock.min_qty = int(data.get('min_qty', 10))
             
             db.session.add(stock)
             db.session.commit()
@@ -280,14 +283,13 @@ def handle_orders():
             order_number = f"ORD-{datetime.now().strftime('%Y%m%d')}-{Order.query.count() + 1:04d}"
             
             # Create order
-            order = Order(
-                order_number=order_number,
-                order_type=data['order_type'],
-                customer_name=data.get('customer_name', ''),
-                customer_mobile=data.get('customer_mobile', ''),
-                customer_gst=data.get('customer_gst', ''),
-                status='pending'
-            )
+            order = Order()
+            order.order_number = order_number
+            order.order_type = data['order_type']
+            order.customer_name = data.get('customer_name', '')
+            order.customer_mobile = data.get('customer_mobile', '')
+            order.customer_gst = data.get('customer_gst', '')
+            order.status = 'pending'
             
             db.session.add(order)
             db.session.flush()
@@ -308,13 +310,12 @@ def handle_orders():
                 # Calculate GST
                 gst_amount = (item_total * product.gst_rate) / 100
                 
-                order_item = OrderItem(
-                    order_id=order.id,
-                    product_id=product.id,
-                    quantity=quantity,
-                    unit_price=unit_price,
-                    total_price=item_total
-                )
+                order_item = OrderItem()
+                order_item.order_id = order.id
+                order_item.product_id = product.id
+                order_item.quantity = quantity
+                order_item.unit_price = unit_price
+                order_item.total_price = item_total
                 
                 db.session.add(order_item)
                 
@@ -571,8 +572,9 @@ def seasonal_trends_api():
                 extract('month', Order.created_at).in_(months)
             ).first()
             
-            sales_amount = float(quarter_sales.sales or 0)
-            order_count = int(quarter_sales.orders or 0)
+            # Handle potential None values from database query
+            sales_amount = float(getattr(quarter_sales, 'sales', 0) or 0)
+            order_count = int(getattr(quarter_sales, 'orders', 0) or 0)
             
             # Calculate growth compared to previous quarter
             if quarterly_sales:
