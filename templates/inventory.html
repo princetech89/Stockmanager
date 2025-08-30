@@ -6,7 +6,7 @@
 <div class="page-header">
     <h1 class="page-title">Inventory Management</h1>
     <div class="page-actions">
-        <button class="btn btn-primary" onclick="openAddProductModal()">
+        <button class="btn btn-primary animated" onclick="openAddProductModal()">
             <i class="fas fa-plus"></i>
             Add Product
         </button>
@@ -80,6 +80,11 @@
             <i class="fas fa-chevron-right"></i>
         </button>
     </div>
+</div>
+<!-- Animated Side Panel Container -->
+<div id="sidePanelBackdrop" class="side-panel-backdrop"></div>
+<div id="inventorySidePanel" class="side-panel">
+    <!-- Side panel content will be populated by JavaScript -->
 </div>
 {% endblock %}
 
