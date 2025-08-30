@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Stock Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Dashboard</h1>
+    <div class="page-actions">
+        <button class="btn btn-primary" onclick="refreshDashboard()">
+            <i class="fas fa-sync-alt"></i>
+            Refresh
+        </button>
+    </div>
+</div>
+
+<!-- Key Metrics Cards -->
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-icon">
+            <i class="fas fa-boxes"></i>
+        </div>
+        <div class="metric-content">
+            <h3 class="metric-value" id="totalProducts">-</h3>
+            <p class="metric-label">Total Products</p>
+        </div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-icon">
+            <i class="fas fa-warehouse"></i>
+        </div>
+        <div class="metric-content">
+            <h3 class="metric-value" id="totalStock">-</h3>
+            <p class="metric-label">Total Stock</p>
+        </div>
+    </div>
+    
+    <div class="metric-card alert">
+        <div class="metric-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="metric-content">
+            <h3 class="metric-value" id="lowStockCount">-</h3>
+            <p class="metric-label">Low Stock Alerts</p>
+        </div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-icon">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="metric-content">
+            <h3 class="metric-value" id="monthlySales">-</h3>
+            <p class="metric-label">Monthly Sales</p>
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="charts-grid">
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>Sales Trend (Last 7 Days)</h3>
+            <div class="chart-actions">
+                <button class="btn btn-sm btn-outline" onclick="exportChart('salesChart')">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+    
+    <div class="chart-card">
+        <div class="chart-header">
+            <h3>Product Categories</h3>
+            <div class="chart-actions">
+                <button class="btn btn-sm btn-outline" onclick="exportChart('categoryChart')">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        </div>
+        <div class="chart-container">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activities -->
+<div class="dashboard-section">
+    <div class="section-header">
+        <h3>Recent Activities</h3>
+        <a href="/orders" class="btn btn-sm btn-primary">View All</a>
+    </div>
+    
+    <div class="activities-list" id="recentActivities">
+        <!-- Activities will be loaded here -->
+    </div>
+</div>
+
+<!-- Low Stock Alerts -->
+<div class="dashboard-section">
+    <div class="section-header">
+        <h3>Low Stock Alerts</h3>
+        <a href="/inventory" class="btn btn-sm btn-warning">Manage Stock</a>
+    </div>
+    
+    <div class="alerts-list" id="lowStockAlerts">
+        <!-- Low stock items will be loaded here -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

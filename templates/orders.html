@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Orders - Stock Inventory Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Order Management</h1>
+    <div class="page-actions">
+        <button class="btn btn-primary" onclick="openCreateOrderModal()">
+            <i class="fas fa-plus"></i>
+            Create Order
+        </button>
+        <button class="btn btn-outline" onclick="exportOrders()">
+            <i class="fas fa-download"></i>
+            Export
+        </button>
+    </div>
+</div>
+
+<!-- Order Tabs -->
+<div class="tabs-container">
+    <div class="tabs-nav">
+        <button class="tab-btn active" onclick="switchTab('sales')" id="salesTab">
+            <i class="fas fa-shopping-cart"></i>
+            Sales Orders
+        </button>
+        <button class="tab-btn" onclick="switchTab('purchase')" id="purchaseTab">
+            <i class="fas fa-truck"></i>
+            Purchase Orders
+        </button>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="filters-section">
+    <div class="filter-group">
+        <input type="text" class="form-control" placeholder="Search orders..." id="orderSearch">
+    </div>
+    <div class="filter-group">
+        <input type="date" class="form-control" id="startDate">
+    </div>
+    <div class="filter-group">
+        <input type="date" class="form-control" id="endDate">
+    </div>
+    <div class="filter-group">
+        <select class="form-control" id="statusFilter">
+            <option value="">All Status</option>
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <button class="btn btn-secondary" onclick="clearOrderFilters()">
+            <i class="fas fa-times"></i>
+            Clear
+        </button>
+    </div>
+</div>
+
+<!-- Orders Table -->
+<div class="table-container">
+    <table class="data-table" id="ordersTable">
+        <thead>
+            <tr>
+                <th onclick="sortOrderTable(0)">Order Number <i class="fas fa-sort"></i></th>
+                <th onclick="sortOrderTable(1)">Customer <i class="fas fa-sort"></i></th>
+                <th onclick="sortOrderTable(2)">Date <i class="fas fa-sort"></i></th>
+                <th onclick="sortOrderTable(3)">Items <i class="fas fa-sort"></i></th>
+                <th onclick="sortOrderTable(4)">Amount (₹) <i class="fas fa-sort"></i></th>
+                <th onclick="sortOrderTable(5)">GST (₹) <i class="fas fa-sort"></i></th>
+                <th onclick="sortOrderTable(6)">Status <i class="fas fa-sort"></i></th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="ordersTableBody">
+            <!-- Order rows will be loaded here -->
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination -->
+<div class="pagination-container">
+    <div class="pagination-info">
+        Showing <span id="orderEntriesStart">0</span> to <span id="orderEntriesEnd">0</span> of <span id="orderTotalEntries">0</span> entries
+    </div>
+    <div class="pagination-controls">
+        <button class="btn btn-sm btn-outline" id="orderPrevPage" onclick="changeOrderPage(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <span class="page-numbers" id="orderPageNumbers"></span>
+        <button class="btn btn-sm btn-outline" id="orderNextPage" onclick="changeOrderPage(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/orders.js') }}"></script>
+{% endblock %}
