@@ -1,7 +1,7 @@
 # Enhanced features for Stock Inventory Management System
 
 from flask import Blueprint, jsonify, request
-from database import db
+from extensions import db
 from models import Product, Stock, Order, OrderItem, Customer, GSTState
 import qrcode
 import io
