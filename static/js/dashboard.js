@@ -39,7 +39,7 @@ class DashboardManager {
                 throw new Error('DataStorage not available');
             }
             
-            const stats = await DataStorage.getDashboardStats();
+            const stats = await window.DataStorage.getDashboardStats();
             this.updateMetricCards(stats);
         } catch (error) {
             console.error('Error loading dashboard stats:', error);
@@ -104,7 +104,7 @@ class DashboardManager {
                 throw new Error('DataStorage not available');
             }
             
-            const data = await DataStorage.getSalesChartData();
+            const data = await window.DataStorage.getSalesChartData();
             
             if (this.charts.salesChart) {
                 this.charts.salesChart.destroy();
@@ -170,7 +170,7 @@ class DashboardManager {
                 throw new Error('DataStorage not available');
             }
             
-            const data = await DataStorage.getCategoryChartData();
+            const data = await window.DataStorage.getCategoryChartData();
             
             if (this.charts.categoryChart) {
                 this.charts.categoryChart.destroy();
@@ -265,7 +265,7 @@ class DashboardManager {
         if (!container) return;
 
         try {
-            const products = await DataStorage.getProducts();
+            const products = await window.DataStorage.getProducts();
             const lowStockProducts = products.filter(product => 
                 (product.available_qty || 0) <= (product.min_qty || 10)
             );

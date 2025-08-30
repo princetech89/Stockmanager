@@ -153,7 +153,7 @@ class StockManagementApp {
         }
 
         // Get low stock count from storage
-        DataStorage.getDashboardStats().then(stats => {
+        window.DataStorage.getDashboardStats().then(stats => {
             const count = stats.low_stock_count || 0;
             this.notificationBadge.textContent = count;
             this.notificationBadge.style.display = count > 0 ? 'block' : 'none';
@@ -490,7 +490,7 @@ class StockManagementApp {
 
     formatCurrency(amount) {
         if (typeof DataStorage !== 'undefined' && DataStorage) {
-            return DataStorage.formatCurrency(amount);
+            return window.DataStorage.formatCurrency(amount);
         }
         return '₹' + Number(amount).toLocaleString('en-IN', { minimumFractionDigits: 2 });
     }

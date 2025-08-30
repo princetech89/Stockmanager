@@ -453,7 +453,7 @@ class DataStorage {
         }
     }
 
-    // Products API
+    // Products API  
     async getProducts() {
         try {
             const response = await this.apiRequest('/products');
@@ -464,12 +464,101 @@ class DataStorage {
             return JSON.parse(localStorage.getItem(this.storageKeys.products) || '[]');
         }
     }
+
+    // Settings API
+    getSettings() {
+        try {
+            return JSON.parse(localStorage.getItem(this.storageKeys.settings) || '{}');
+        } catch (error) {
+            console.error('Failed to get settings:', error);
+            return {};
+        }
+    }
+
+    // Save Settings
+    saveSettings(settings) {
+        try {
+            localStorage.setItem(this.storageKeys.settings, JSON.stringify(settings));
+            return true;
+        } catch (error) {
+            console.error('Failed to save settings:', error);
+            return false;
+        }
+    }
+
+    // Get Orders (with type filter)
+    getOrders(type = null) {
+        try {
+            const orders = JSON.parse(localStorage.getItem(this.storageKeys.orders) || '[]');
+            if (type) {
+                return orders.filter(order => order.order_type === type);
+            }
+            return orders;
+        } catch (error) {
+            console.error('Failed to get orders:', error);
+            return [];
+        }
+    }
+
+    // Save Orders
+    saveOrders(orders) {
+        try {
+            localStorage.setItem(this.storageKeys.orders, JSON.stringify(orders));
+            return true;
+        } catch (error) {
+            console.error('Failed to save orders:', error);
+            return false;
+        }
+    }
+
+    // Save Products
+    saveProducts(products) {
+        try {
+            localStorage.setItem(this.storageKeys.products, JSON.stringify(products));
+            return true;
+        } catch (error) {
+            console.error('Failed to save products:', error);
+            return false;
+        }
+    }
+
+    // Get Invoices
+    getInvoices() {
+        try {
+            return JSON.parse(localStorage.getItem(this.storageKeys.invoices) || '[]');
+        } catch (error) {
+            console.error('Failed to get invoices:', error);
+            return [];
+        }
+    }
+
+    // Save Invoices
+    saveInvoices(invoices) {
+        try {
+            localStorage.setItem(this.storageKeys.invoices, JSON.stringify(invoices));
+            return true;
+        } catch (error) {
+            console.error('Failed to save invoices:', error);
+            return false;
+        }
+    }
 }
 
 // Create global instance
 try {
     window.DataStorage = new DataStorage();
     console.log('DataStorage instance created successfully');
+    
+    // Debug: Log available methods
+    console.log('Available DataStorage methods:', Object.getOwnPropertyNames(Object.getPrototypeOf(window.DataStorage)));
+    
+    // Verify critical methods
+    if (typeof window.DataStorage.getDashboardStats !== 'function') {
+        console.error('getDashboardStats method not found!');
+    } else {
+        console.log('getDashboardStats method confirmed');
+    }
+    
 } catch (error) {
     console.error('Failed to create DataStorage instance:', error);
 }

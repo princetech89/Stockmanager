@@ -24,7 +24,7 @@ class InventoryManager {
     initializeInventory() {
         this.loadProducts();
         this.loadCategories();
-        this.setupPagination();
+        this.initializePagination();
     }
 
     bindEvents() {
@@ -64,7 +64,7 @@ class InventoryManager {
     async loadProducts() {
         try {
             this.showTableLoading();
-            this.products = await DataStorage.getProducts();
+            this.products = await window.DataStorage.getProducts();
             this.applyFilters();
         } catch (error) {
             console.error('Error loading products:', error);
@@ -91,6 +91,23 @@ class InventoryManager {
                 categoryFilter.appendChild(option);
             });
         }
+    }
+
+    initializePagination() {
+        // Set up pagination event handlers
+        const prevButton = document.getElementById('prevPage');
+        const nextButton = document.getElementById('nextPage');
+        
+        if (prevButton) {
+            prevButton.addEventListener('click', () => this.changePage(-1));
+        }
+        
+        if (nextButton) {
+            nextButton.addEventListener('click', () => this.changePage(1));
+        }
+        
+        // Initialize pagination display
+        this.updatePagination();
     }
 
     applyFilters() {
@@ -176,7 +193,7 @@ class InventoryManager {
                     <td>
                         <span class="category-badge">${product.category || 'Uncategorized'}</span>
                     </td>
-                    <td class="text-right">${DataStorage.formatCurrency(product.unit_price)}</td>
+                    <td class="text-right">${window.DataStorage.formatCurrency(product.unit_price)}</td>
                     <td class="text-right">${product.gst_rate}%</td>
                     <td class="text-right">
                         <strong class="${stockStatus.class}">${stockQty}</strong>
@@ -444,7 +461,7 @@ class InventoryManager {
 
         const generateSKU = () => {
             if (nameField.value && categoryField.value) {
-                const sku = DataStorage.generateSKU(nameField.value, categoryField.value);
+                const sku = window.DataStorage.generateSKU(nameField.value, categoryField.value);
                 if (!skuField.value) {
                     skuField.value = sku;
                 }
@@ -480,7 +497,7 @@ class InventoryManager {
 
         // Auto-generate SKU if not provided
         if (!productData.sku) {
-            productData.sku = DataStorage.generateSKU(productData.name, productData.category);
+            productData.sku = window.DataStorage.generateSKU(productData.name, productData.category);
         }
 
         try {
@@ -488,9 +505,9 @@ class InventoryManager {
             
             let result;
             if (isEdit && productId) {
-                result = await DataStorage.updateProduct(productId, productData);
+                result = await window.DataStorage.updateProduct(productId, productData);
             } else {
-                result = await DataStorage.createProduct(productData);
+                result = await window.DataStorage.createProduct(productData);
             }
 
             if (result.success) {
@@ -746,7 +763,7 @@ class InventoryManager {
         }
 
         try {
-            const result = await DataStorage.updateProduct(productId, {
+            const result = await window.DataStorage.updateProduct(productId, {
                 ...product,
                 available_qty: newStock
             });
@@ -777,7 +794,7 @@ class InventoryManager {
         }
 
         try {
-            const result = await DataStorage.deleteProduct(productId);
+            const result = await window.DataStorage.deleteProduct(productId);
             
             if (result.success) {
                 showNotification(result.message || 'Product deleted successfully', 'success');
