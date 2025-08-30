@@ -213,13 +213,44 @@ class StockManagementApp {
     }
 
     handleResize() {
+        // Comprehensive device detection and responsive behavior
         const width = window.innerWidth;
+        const height = window.innerHeight;
         
-        if (width <= 1024) {
+        // Remove all device classes first
+        document.body.classList.remove('mobile-device', 'tablet-device', 'desktop-device', 'landscape-mode');
+        this.sidebar.classList.remove('mobile');
+        
+        if (width <= 479) {
+            // Small mobile
+            document.body.classList.add('mobile-device');
+            this.sidebar.classList.add('collapsed');
+            this.adjustForSmallMobile();
+        } else if (width <= 767) {
+            // Large mobile
+            document.body.classList.add('mobile-device');
+            this.sidebar.classList.add('collapsed');
+            this.adjustForMobile();
+        } else if (width <= 1023) {
+            // Tablet
+            document.body.classList.add('tablet-device');
             this.sidebar.classList.add('mobile');
+            this.adjustForTablet();
         } else {
+            // Desktop
+            document.body.classList.add('desktop-device');
             this.sidebar.classList.remove('mobile', 'open');
+            this.adjustForDesktop();
         }
+        
+        // Handle orientation for mobile devices
+        if (width <= 768) {
+            const isLandscape = width > height;
+            document.body.classList.toggle('landscape-mode', isLandscape);
+        }
+        
+        // Update touch targets and interface elements
+        this.updateInterfaceForDevice();
     }
 
     updateNotificationCount() {
@@ -653,3 +684,93 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+    adjustForTablet() {
+        // Tablet optimizations
+        const charts = document.querySelectorAll('.chart-container');
+        charts.forEach(chart => chart.style.height = '300px');
+        
+        // Show limited search on tablet
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox) {
+            searchBox.style.display = 'block';
+            searchBox.style.maxWidth = '200px';
+        }
+    }
+
+    adjustForDesktop() {
+        // Desktop optimizations
+        const charts = document.querySelectorAll('.chart-container');
+        charts.forEach(chart => chart.style.height = '350px');
+        
+        // Full search on desktop
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox) {
+            searchBox.style.display = 'block';
+            searchBox.style.maxWidth = 'none';
+        }
+    }
+
+    adjustForSmallMobile() {
+        // Optimize for very small screens
+        const charts = document.querySelectorAll('.chart-container');
+        charts.forEach(chart => chart.style.height = '200px');
+        
+        // Stack buttons vertically
+        const buttonGroups = document.querySelectorAll('.btn-group');
+        buttonGroups.forEach(group => {
+            group.style.flexDirection = 'column';
+        });
+    }
+
+    adjustForMobile() {
+        // Mobile optimizations
+        const charts = document.querySelectorAll('.chart-container');
+        charts.forEach(chart => chart.style.height = '250px');
+        
+        // Hide search on mobile
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox) searchBox.style.display = 'none';
+    }
+
+    updateInterfaceForDevice() {
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        document.body.classList.toggle('touch-device', isTouchDevice);
+        
+        // Update button sizes for touch
+        if (isTouchDevice) {
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                if (!btn.style.minHeight) {
+                    btn.style.minHeight = '44px';
+                }
+            });
+        }
+    }
+
+    // Device detection on initialization
+    detectDevice() {
+        const userAgent = navigator.userAgent.toLowerCase();
+        const isMobile = /iphone|ipad|android|blackberry|windows phone|mobile/.test(userAgent);
+        const isTablet = /ipad|android(?!.*mobile)|tablet/.test(userAgent);
+        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        
+        // Store device info globally
+        window.deviceInfo = {
+            isMobile,
+            isTablet,
+            isTouch,
+            isDesktop: !isMobile && !isTablet,
+            screenWidth: window.innerWidth,
+            screenHeight: window.innerHeight,
+            pixelRatio: window.devicePixelRatio || 1
+        };
+        
+        // Add device classes
+        document.body.classList.toggle('mobile-device', isMobile);
+        document.body.classList.toggle('tablet-device', isTablet);
+        document.body.classList.toggle('touch-device', isTouch);
+        document.body.classList.toggle('desktop-device', !isMobile && !isTablet);
+        
+        return window.deviceInfo;
+    }

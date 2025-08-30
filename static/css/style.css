@@ -2239,3 +2239,307 @@ body::after {
 .shadow-sm { box-shadow: var(--shadow-sm); }
 .shadow-lg { box-shadow: var(--shadow-lg); }
 .shadow-none { box-shadow: none; }
+
+/* Enhanced Responsive Design for All Devices */
+
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+    .main-content {
+        max-width: 1400px;
+        margin-left: calc(var(--sidebar-width) + (100vw - 1400px) / 2);
+    }
+}
+
+/* Tablet (768px - 1023px) Enhanced */
+@media (max-width: 1023px) and (min-width: 768px) {
+    :root {
+        --sidebar-width: 280px;
+        --topbar-height: 60px;
+    }
+    
+    .sidebar {
+        z-index: 1100;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+    }
+    
+    .search-box {
+        max-width: 200px;
+    }
+    
+    .profile-info {
+        display: none;
+    }
+    
+    /* Touch-friendly interface */
+    .btn {
+        min-height: 44px;
+        padding: 0.75rem 1rem;
+    }
+    
+    .nav-link {
+        padding: 1rem 1.5rem;
+        min-height: 48px;
+    }
+}
+
+/* Mobile Large (480px - 767px) Enhanced */
+@media (max-width: 767px) and (min-width: 480px) {
+    .search-box {
+        display: none;
+    }
+    
+    .metric-cards {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+    }
+    
+    .chart-container {
+        height: 250px;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .btn-group .btn {
+        width: 100%;
+    }
+    
+    /* Side panel optimizations */
+    .side-panel {
+        width: 100vw !important;
+        right: -100vw !important;
+        border-radius: 0;
+    }
+}
+
+/* Mobile Small (up to 479px) Enhanced */
+@media (max-width: 479px) {
+    :root {
+        --sidebar-width: 100vw;
+        --topbar-height: 52px;
+    }
+    
+    .metric-cards {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .page-title {
+        font-size: 1.25rem;
+    }
+    
+    .btn {
+        font-size: 0.875rem;
+        padding: 0.625rem 0.875rem;
+    }
+    
+    .data-table {
+        font-size: 0.75rem;
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: 0.5rem 0.25rem;
+    }
+    
+    .page-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+    
+    .page-actions .btn {
+        width: 100%;
+    }
+}
+
+/* Touch devices optimizations */
+@media (pointer: coarse) {
+    .btn:hover {
+        transform: none;
+    }
+    
+    .nav-link:hover {
+        background-color: transparent;
+    }
+    
+    .nav-link:active {
+        background-color: var(--bg-tertiary);
+    }
+    
+    /* Larger touch targets */
+    .sidebar-toggle,
+    .notification-icon,
+    .profile-menu {
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+/* Device-specific classes */
+.mobile-device .sidebar {
+    transform: translateX(-100%);
+}
+
+.mobile-device .sidebar.open {
+    transform: translateX(0);
+}
+
+.tablet-device .charts-grid {
+    grid-template-columns: 1fr;
+}
+
+.touch-device .hover-effects {
+    display: none;
+}
+
+/* Landscape mode optimizations */
+.landscape-mode .sidebar {
+    width: 200px;
+}
+
+.landscape-mode .metric-cards {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .sidebar {
+        border-right-width: 0.5px;
+    }
+    
+    .topbar {
+        border-bottom-width: 0.5px;
+    }
+}
+
+/* Mobile Animation Performance Optimizations */
+@media (max-width: 767px) {
+    /* Reduce motion for better performance */
+    .sidebar,
+    .side-panel,
+    .nav-link,
+    .btn {
+        transition-duration: 0.2s;
+    }
+    
+    /* Disable non-essential animations on mobile */
+    .hover-glow,
+    .pulse-effect,
+    .floating-animation {
+        animation: none;
+    }
+    
+    /* Optimize transforms for mobile GPU */
+    .sidebar {
+        transform: translate3d(-100%, 0, 0);
+        will-change: transform;
+    }
+    
+    .sidebar.open {
+        transform: translate3d(0, 0, 0);
+    }
+    
+    .side-panel {
+        transform: translate3d(100%, 0, 0);
+        will-change: transform;
+    }
+    
+    .side-panel.show {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* Touch-optimized interactions */
+.touch-device .btn:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+.touch-device .nav-link:active {
+    background-color: var(--accent-color-light);
+    transform: translateX(4px);
+}
+
+/* Prevent text selection on touch devices */
+.touch-device .sidebar-header,
+.touch-device .nav-text,
+.touch-device .btn {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* iOS Safari specific optimizations */
+.device-ios .sidebar {
+    -webkit-overflow-scrolling: touch;
+}
+
+.device-ios input,
+.device-ios textarea {
+    border-radius: 0;
+    -webkit-appearance: none;
+}
+
+/* Android specific optimizations */
+.device-android .sidebar {
+    overflow-scrolling: touch;
+}
+
+/* Landscape mode adjustments for mobile */
+.orientation-landscape.device-mobile .sidebar {
+    width: 200px;
+}
+
+.orientation-landscape.device-mobile .metric-cards {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.orientation-landscape.device-mobile .chart-container {
+    height: 200px;
+}
+
+/* Improved scrolling for mobile */
+.device-mobile .page-content,
+.device-mobile .side-panel-body {
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+}
+
+/* Better form inputs for mobile */
+.device-mobile input,
+.device-mobile textarea,
+.device-mobile select {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.75rem;
+    border-radius: 8px;
+}
+
+/* Optimize modal for mobile */
+.device-mobile .modal {
+    padding: 0;
+}
+
+.device-mobile .modal-content {
+    margin: 0;
+    border-radius: 0;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+/* Full viewport height calculation */
+:root {
+    --vh: 1vh;
+}
+
+.device-mobile .full-height {
+    height: calc(var(--vh, 1vh) * 100);
+}
