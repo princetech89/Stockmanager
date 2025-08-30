@@ -2,10 +2,12 @@ from flask import render_template, request, jsonify, redirect, url_for
 from app import app, db
 from models import Product, Stock, Order, OrderItem, Supplier, ProductBatch, Customer, CreditTransaction, GSTState
 from datetime import datetime, timedelta
+from sqlalchemy import func, extract, desc
 import json
 import qrcode
 import io
 import base64
+import calendar
 
 @app.route('/')
 def landing():
@@ -347,3 +349,259 @@ def category_chart():
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+# Real Analytics API Endpoints
+@app.route('/api/analytics/sales-forecast')
+def sales_forecast_api():
+    try:
+        # Get historical sales data for last 12 months
+        today = datetime.now()
+        twelve_months_ago = today - timedelta(days=365)
+        
+        # Get monthly sales for the past 12 months
+        monthly_sales = db.session.query(
+            extract('year', Order.created_at).label('year'),
+            extract('month', Order.created_at).label('month'),
+            func.sum(Order.total_amount).label('total_sales'),
+            func.count(Order.id).label('order_count')
+        ).filter(
+            Order.order_type == 'sales',
+            Order.status == 'completed',
+            Order.created_at >= twelve_months_ago
+        ).group_by(
+            extract('year', Order.created_at),
+            extract('month', Order.created_at)
+        ).order_by(
+            extract('year', Order.created_at),
+            extract('month', Order.created_at)
+        ).all()
+        
+        historical = []
+        forecast = []
+        
+        # Process historical data
+        for sale in monthly_sales:
+            month_name = calendar.month_abbr[int(sale.month)]
+            historical.append({
+                'month': f"{month_name} {int(sale.year)}",
+                'sales': float(sale.total_sales or 0),
+                'orders': int(sale.order_count),
+                'type': 'historical'
+            })
+        
+        # Simple forecast: calculate average growth rate and project next 6 months
+        if len(historical) >= 2:
+            # Calculate average monthly growth
+            total_growth = 0
+            growth_periods = 0
+            
+            for i in range(1, len(historical)):
+                if historical[i-1]['sales'] > 0:
+                    growth = (historical[i]['sales'] - historical[i-1]['sales']) / historical[i-1]['sales']
+                    total_growth += growth
+                    growth_periods += 1
+            
+            avg_growth = total_growth / growth_periods if growth_periods > 0 else 0.05  # Default 5%
+            
+            # Cap growth between -20% and +50%
+            avg_growth = max(-0.20, min(0.50, avg_growth))
+            
+            # Generate forecast for next 6 months
+            last_sales = historical[-1]['sales'] if historical else 0
+            current_date = datetime.now()
+            
+            for i in range(6):
+                future_date = current_date + timedelta(days=30 * (i + 1))
+                month_name = calendar.month_abbr[future_date.month]
+                last_sales = last_sales * (1 + avg_growth)
+                
+                forecast.append({
+                    'month': f"{month_name} {future_date.year} (Forecast)",
+                    'sales': last_sales,
+                    'orders': int(last_sales / 2000) if last_sales > 0 else 0,  # Estimate orders
+                    'type': 'forecast'
+                })
+        
+        return jsonify({
+            'historical': historical,
+            'forecast': forecast
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'historical': [],
+            'forecast': [],
+            'error': str(e)
+        }), 500
+
+@app.route('/api/analytics/abc-analysis')
+def abc_analysis_api():
+    try:
+        # Get product revenue data
+        product_revenues = db.session.query(
+            Product.id,
+            Product.name,
+            Product.sku,
+            func.sum(OrderItem.total_price).label('total_revenue')
+        ).join(OrderItem).join(Order).filter(
+            Order.order_type == 'sales',
+            Order.status == 'completed'
+        ).group_by(
+            Product.id, Product.name, Product.sku
+        ).order_by(desc('total_revenue')).all()
+        
+        if not product_revenues:
+            return jsonify({
+                'categoryA': {'count': 0, 'percentage': 0, 'value': 0},
+                'categoryB': {'count': 0, 'percentage': 0, 'value': 0},
+                'categoryC': {'count': 0, 'percentage': 0, 'value': 0}
+            })
+        
+        total_products = len(product_revenues)
+        total_revenue = sum(float(p.total_revenue) for p in product_revenues)
+        
+        # ABC Classification: A=80% revenue (top 20%), B=15% revenue (next 30%), C=5% revenue (bottom 50%)
+        cumulative_revenue = 0
+        category_a_count = 0
+        category_b_count = 0
+        category_c_count = 0
+        category_a_value = 0
+        category_b_value = 0
+        category_c_value = 0
+        
+        for product in product_revenues:
+            cumulative_revenue += float(product.total_revenue)
+            cumulative_percentage = (cumulative_revenue / total_revenue) * 100
+            
+            if cumulative_percentage <= 80:
+                category_a_count += 1
+                category_a_value += float(product.total_revenue)
+            elif cumulative_percentage <= 95:
+                category_b_count += 1
+                category_b_value += float(product.total_revenue)
+            else:
+                category_c_count += 1
+                category_c_value += float(product.total_revenue)
+        
+        return jsonify({
+            'categoryA': {
+                'count': category_a_count,
+                'percentage': round((category_a_count / total_products) * 100, 1),
+                'value': round((category_a_value / total_revenue) * 100, 1)
+            },
+            'categoryB': {
+                'count': category_b_count,
+                'percentage': round((category_b_count / total_products) * 100, 1),
+                'value': round((category_b_value / total_revenue) * 100, 1)
+            },
+            'categoryC': {
+                'count': category_c_count,
+                'percentage': round((category_c_count / total_products) * 100, 1),
+                'value': round((category_c_value / total_revenue) * 100, 1)
+            }
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'categoryA': {'count': 0, 'percentage': 0, 'value': 0},
+            'categoryB': {'count': 0, 'percentage': 0, 'value': 0},
+            'categoryC': {'count': 0, 'percentage': 0, 'value': 0},
+            'error': str(e)
+        }), 500
+
+@app.route('/api/analytics/seasonal-trends')
+def seasonal_trends_api():
+    try:
+        # Get quarterly sales data for the current year
+        current_year = datetime.now().year
+        
+        quarterly_sales = []
+        quarters = [
+            ('Q1', [1, 2, 3]),
+            ('Q2', [4, 5, 6]),
+            ('Q3', [7, 8, 9]),
+            ('Q4', [10, 11, 12])
+        ]
+        
+        for quarter_name, months in quarters:
+            quarter_sales = db.session.query(
+                func.sum(Order.total_amount).label('sales'),
+                func.count(Order.id).label('orders')
+            ).filter(
+                Order.order_type == 'sales',
+                Order.status == 'completed',
+                extract('year', Order.created_at) == current_year,
+                extract('month', Order.created_at).in_(months)
+            ).first()
+            
+            sales_amount = float(quarter_sales.sales or 0)
+            order_count = int(quarter_sales.orders or 0)
+            
+            # Calculate growth compared to previous quarter
+            if quarterly_sales:
+                prev_sales = quarterly_sales[-1]['sales']
+                growth = ((sales_amount - prev_sales) / prev_sales * 100) if prev_sales > 0 else 0
+            else:
+                growth = 0
+            
+            quarterly_sales.append({
+                'quarter': quarter_name,
+                'sales': sales_amount,
+                'orders': order_count,
+                'growth': round(growth, 1)
+            })
+        
+        return jsonify(quarterly_sales)
+        
+    except Exception as e:
+        return jsonify([], 500)
+
+@app.route('/api/analytics/inventory-optimization')
+def inventory_optimization_api():
+    try:
+        # Analyze stock levels
+        all_stocks = Stock.query.join(Product).all()
+        
+        overstocked = 0
+        understocked = 0
+        optimal = 0
+        suggestions = []
+        
+        for stock in all_stocks:
+            if stock.available_qty > stock.min_qty * 2:  # More than 2x minimum = overstocked
+                overstocked += 1
+                suggestions.append({
+                    'product': stock.product.name,
+                    'action': 'reduce',
+                    'quantity': stock.available_qty - (stock.min_qty * 2),
+                    'reason': 'Overstocked - consider promotion'
+                })
+            elif stock.available_qty <= stock.min_qty:  # At or below minimum = understocked
+                understocked += 1
+                suggestions.append({
+                    'product': stock.product.name,
+                    'action': 'increase',
+                    'quantity': stock.min_qty * 2 - stock.available_qty,
+                    'reason': 'Below minimum stock level'
+                })
+            else:
+                optimal += 1
+        
+        # Limit suggestions to top 5
+        suggestions = suggestions[:5]
+        
+        return jsonify({
+            'overstocked': overstocked,
+            'understocked': understocked,
+            'optimal': optimal,
+            'suggestions': suggestions
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'overstocked': 0,
+            'understocked': 0,
+            'optimal': 0,
+            'suggestions': [],
+            'error': str(e)
+        }), 500

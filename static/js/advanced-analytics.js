@@ -475,73 +475,84 @@ class AdvancedAnalyticsManager {
     }
 
     async loadAnalyticsData() {
-        // Simulate loading analytics data
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        // Load real analytics data from database
         this.analyticsData = {
-            salesForecast: this.generateSalesForecastData(),
-            abcAnalysis: this.generateABCAnalysisData(),
-            seasonalTrends: this.generateSeasonalTrendsData(),
-            inventoryOptimization: this.generateInventoryOptimizationData()
+            salesForecast: await this.generateSalesForecastData(),
+            abcAnalysis: await this.generateABCAnalysisData(),
+            seasonalTrends: await this.generateSeasonalTrendsData(),
+            inventoryOptimization: await this.generateInventoryOptimizationData()
         };
     }
 
-    generateSalesForecastData() {
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const historical = [];
-        const forecast = [];
-        
-        // Generate historical data (last 12 months)
-        for (let i = 0; i < 12; i++) {
-            historical.push({
-                month: months[i],
-                sales: 50000 + Math.random() * 30000,
-                type: 'historical'
-            });
+    async generateSalesForecastData() {
+        try {
+            // Get real sales data from API
+            const response = await fetch('/api/analytics/sales-forecast');
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error('Error loading real sales data:', error);
         }
         
-        // Generate forecast data (next 6 months)
-        let lastSales = historical[historical.length - 1].sales;
-        for (let i = 0; i < 6; i++) {
-            const growth = 0.02 + Math.random() * 0.08; // 2-10% growth
-            lastSales = lastSales * (1 + growth);
-            forecast.push({
-                month: months[(11 + i) % 12] + ' (Forecast)',
-                sales: lastSales,
-                type: 'forecast'
-            });
-        }
-        
-        return { historical, forecast };
-    }
-
-    generateABCAnalysisData() {
-        return {
-            categoryA: { count: 45, percentage: 20, value: 70 },
-            categoryB: { count: 67, percentage: 30, value: 20 },
-            categoryC: { count: 113, percentage: 50, value: 10 }
+        // Fallback to empty data if API fails
+        return { 
+            historical: [],
+            forecast: []
         };
     }
 
-    generateSeasonalTrendsData() {
-        const quarters = ['Q1', 'Q2', 'Q3', 'Q4'];
-        return quarters.map((quarter, index) => ({
-            quarter,
-            sales: 200000 + (index * 50000) + (Math.random() * 30000),
-            growth: -5 + Math.random() * 20
-        }));
+    async generateABCAnalysisData() {
+        try {
+            // Get real ABC analysis from API
+            const response = await fetch('/api/analytics/abc-analysis');
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error('Error loading ABC analysis:', error);
+        }
+        
+        // Fallback to zero counts if API fails
+        return {
+            categoryA: { count: 0, percentage: 0, value: 0 },
+            categoryB: { count: 0, percentage: 0, value: 0 },
+            categoryC: { count: 0, percentage: 0, value: 0 }
+        };
     }
 
-    generateInventoryOptimizationData() {
+    async generateSeasonalTrendsData() {
+        try {
+            // Get real seasonal trends from API
+            const response = await fetch('/api/analytics/seasonal-trends');
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error('Error loading seasonal trends:', error);
+        }
+        
+        // Fallback to zero data if API fails
+        return [];
+    }
+
+    async generateInventoryOptimizationData() {
+        try {
+            // Get real inventory optimization from API
+            const response = await fetch('/api/analytics/inventory-optimization');
+            if (response.ok) {
+                return await response.json();
+            }
+        } catch (error) {
+            console.error('Error loading inventory optimization:', error);
+        }
+        
+        // Fallback to zero data if API fails
         return {
-            overstocked: 23,
-            understocked: 15,
-            optimal: 187,
-            suggestions: [
-                { product: 'Premium Laptop', action: 'reduce', quantity: 15, reason: 'Low demand' },
-                { product: 'Wireless Mouse', action: 'increase', quantity: 50, reason: 'High demand' },
-                { product: 'Office Chair', action: 'maintain', quantity: 0, reason: 'Optimal level' }
-            ]
+            overstocked: 0,
+            understocked: 0,
+            optimal: 0,
+            suggestions: []
         };
     }
 
@@ -891,9 +902,8 @@ class AdvancedAnalyticsManager {
     // Refresh methods
     async refreshForecast() {
         showNotification('Refreshing sales forecast...', 'info');
-        await new Promise(resolve => setTimeout(resolve, 1000));
         
-        this.analyticsData.salesForecast = this.generateSalesForecastData();
+        this.analyticsData.salesForecast = await this.generateSalesForecastData();
         this.initializeSalesForecastChart();
         this.updateInsights();
         
@@ -902,9 +912,8 @@ class AdvancedAnalyticsManager {
 
     async refreshABC() {
         showNotification('Refreshing ABC analysis...', 'info');
-        await new Promise(resolve => setTimeout(resolve, 800));
         
-        this.analyticsData.abcAnalysis = this.generateABCAnalysisData();
+        this.analyticsData.abcAnalysis = await this.generateABCAnalysisData();
         this.initializeABCChart();
         
         showNotification('ABC analysis updated!', 'success');
@@ -912,9 +921,8 @@ class AdvancedAnalyticsManager {
 
     async optimizeInventory() {
         showNotification('Optimizing inventory levels...', 'info');
-        await new Promise(resolve => setTimeout(resolve, 1200));
         
-        this.analyticsData.inventoryOptimization = this.generateInventoryOptimizationData();
+        this.analyticsData.inventoryOptimization = await this.generateInventoryOptimizationData();
         this.initializeInventoryOptimizationChart();
         
         showNotification('Inventory optimization complete!', 'success');
