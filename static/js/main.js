@@ -497,7 +497,7 @@ class StockManagementApp {
 
     formatDate(dateString) {
         if (typeof DataStorage !== 'undefined' && DataStorage) {
-            return DataStorage.formatDate(dateString);
+            return window.DataStorage.formatDate(dateString);
         }
         return new Date(dateString).toLocaleDateString('en-GB');
     }

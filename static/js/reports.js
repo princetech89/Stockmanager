@@ -74,17 +74,17 @@ class ReportsManager {
     }
 
     loadSettings() {
-        this.settings = DataStorage.getSettings();
+        this.settings = window.DataStorage.getSettings();
     }
 
     async loadData() {
         try {
-            this.products = await DataStorage.getProducts();
+            this.products = await window.DataStorage.getProducts();
             this.orders = [
-                ...(await DataStorage.getOrders('sales')),
-                ...(await DataStorage.getOrders('purchase'))
+                ...(await window.DataStorage.getOrders('sales')),
+                ...(await window.DataStorage.getOrders('purchase'))
             ];
-            this.invoices = DataStorage.getInvoices();
+            this.invoices = window.DataStorage.getInvoices();
         } catch (error) {
             console.error('Error loading data for reports:', error);
             showNotification('Failed to load data for reports', 'error');
@@ -316,22 +316,22 @@ class ReportsManager {
         const totalGST = salesOrders.reduce((sum, order) => sum + (order.gst_amount || 0), 0);
 
         this.updateReportSummary([
-            { label: 'Total Sales', value: DataStorage.formatCurrency(totalSales) },
+            { label: 'Total Sales', value: window.DataStorage.formatCurrency(totalSales) },
             { label: 'Total Orders', value: totalOrders },
-            { label: 'Average Order Value', value: DataStorage.formatCurrency(avgOrderValue) },
-            { label: 'Total GST Collected', value: DataStorage.formatCurrency(totalGST) }
+            { label: 'Average Order Value', value: window.DataStorage.formatCurrency(avgOrderValue) },
+            { label: 'Total GST Collected', value: window.DataStorage.formatCurrency(totalGST) }
         ]);
 
         // Generate detailed table
         this.renderReportTable([
             'Date', 'Order Number', 'Customer', 'Amount', 'GST', 'Total', 'Status'
         ], salesOrders.map(order => [
-            DataStorage.formatDate(order.created_at),
+            window.DataStorage.formatDate(order.created_at),
             order.order_number,
             order.customer_name || 'N/A',
-            DataStorage.formatCurrency(order.total_amount || 0),
-            DataStorage.formatCurrency(order.gst_amount || 0),
-            DataStorage.formatCurrency((order.total_amount || 0) + (order.gst_amount || 0)),
+            window.DataStorage.formatCurrency(order.total_amount || 0),
+            window.DataStorage.formatCurrency(order.gst_amount || 0),
+            window.DataStorage.formatCurrency((order.total_amount || 0) + (order.gst_amount || 0)),
             order.status
         ]));
     }
@@ -373,7 +373,7 @@ class ReportsManager {
         this.updateReportSummary([
             { label: 'Total Products', value: totalProducts },
             { label: 'Total Stock', value: totalStock },
-            { label: 'Total Stock Value', value: DataStorage.formatCurrency(totalValue) },
+            { label: 'Total Stock Value', value: window.DataStorage.formatCurrency(totalValue) },
             { label: 'Low Stock Items', value: lowStockItems }
         ]);
 
@@ -395,8 +395,8 @@ class ReportsManager {
                 product.category || 'Uncategorized',
                 stock,
                 minStock,
-                DataStorage.formatCurrency(product.unit_price || 0),
-                DataStorage.formatCurrency(value),
+                window.DataStorage.formatCurrency(product.unit_price || 0),
+                window.DataStorage.formatCurrency(value),
                 status
             ];
         }));
@@ -440,20 +440,20 @@ class ReportsManager {
         this.renderChart(chartData);
 
         // Update GST summary
-        document.getElementById('cgst9').textContent = DataStorage.formatCurrency(totalCGST);
-        document.getElementById('sgst9').textContent = DataStorage.formatCurrency(totalSGST);
-        document.getElementById('igst18').textContent = DataStorage.formatCurrency(totalIGST);
-        document.getElementById('totalGST').textContent = DataStorage.formatCurrency(totalCGST + totalSGST + totalIGST);
+        document.getElementById('cgst9').textContent = window.DataStorage.formatCurrency(totalCGST);
+        document.getElementById('sgst9').textContent = window.DataStorage.formatCurrency(totalSGST);
+        document.getElementById('igst18').textContent = window.DataStorage.formatCurrency(totalIGST);
+        document.getElementById('totalGST').textContent = window.DataStorage.formatCurrency(totalCGST + totalSGST + totalIGST);
 
         // Generate summary
         const totalGST = totalCGST + totalSGST + totalIGST;
         const totalTaxableValue = gstOrders.reduce((sum, order) => sum + (order.total_amount || 0), 0);
 
         this.updateReportSummary([
-            { label: 'Total Taxable Value', value: DataStorage.formatCurrency(totalTaxableValue) },
-            { label: 'Total GST Collected', value: DataStorage.formatCurrency(totalGST) },
-            { label: 'CGST', value: DataStorage.formatCurrency(totalCGST) },
-            { label: 'SGST', value: DataStorage.formatCurrency(totalSGST) }
+            { label: 'Total Taxable Value', value: window.DataStorage.formatCurrency(totalTaxableValue) },
+            { label: 'Total GST Collected', value: window.DataStorage.formatCurrency(totalGST) },
+            { label: 'CGST', value: window.DataStorage.formatCurrency(totalCGST) },
+            { label: 'SGST', value: window.DataStorage.formatCurrency(totalSGST) }
         ]);
 
         // Generate detailed table
@@ -462,14 +462,14 @@ class ReportsManager {
         ], gstOrders.map(order => {
             const gstAmount = order.gst_amount || 0;
             return [
-                DataStorage.formatDate(order.created_at),
+                window.DataStorage.formatDate(order.created_at),
                 order.order_number,
                 order.customer_name || 'N/A',
-                DataStorage.formatCurrency(order.total_amount || 0),
-                DataStorage.formatCurrency(gstAmount / 2),
-                DataStorage.formatCurrency(gstAmount / 2),
+                window.DataStorage.formatCurrency(order.total_amount || 0),
+                window.DataStorage.formatCurrency(gstAmount / 2),
+                window.DataStorage.formatCurrency(gstAmount / 2),
                 '₹0.00',
-                DataStorage.formatCurrency(gstAmount)
+                window.DataStorage.formatCurrency(gstAmount)
             ];
         }));
     }
@@ -528,9 +528,9 @@ class ReportsManager {
         const profitMargin = totalRevenue > 0 ? (grossProfit / totalRevenue) * 100 : 0;
 
         this.updateReportSummary([
-            { label: 'Total Revenue', value: DataStorage.formatCurrency(totalRevenue) },
-            { label: 'Total Cost', value: DataStorage.formatCurrency(totalCost) },
-            { label: 'Gross Profit', value: DataStorage.formatCurrency(grossProfit) },
+            { label: 'Total Revenue', value: window.DataStorage.formatCurrency(totalRevenue) },
+            { label: 'Total Cost', value: window.DataStorage.formatCurrency(totalCost) },
+            { label: 'Gross Profit', value: window.DataStorage.formatCurrency(grossProfit) },
             { label: 'Profit Margin', value: profitMargin.toFixed(2) + '%' }
         ]);
 
@@ -541,12 +541,12 @@ class ReportsManager {
         this.renderReportTable([
             'Date', 'Type', 'Order Number', 'Customer/Supplier', 'Amount', 'Impact'
         ], allOrders.map(order => [
-            DataStorage.formatDate(order.created_at),
+            window.DataStorage.formatDate(order.created_at),
             order.type,
             order.order_number,
             order.customer_name || 'N/A',
-            DataStorage.formatCurrency(order.total_amount || 0),
-            order.type === 'Sale' ? '+' + DataStorage.formatCurrency(order.total_amount || 0) : '-' + DataStorage.formatCurrency(order.total_amount || 0)
+            window.DataStorage.formatCurrency(order.total_amount || 0),
+            order.type === 'Sale' ? '+' + window.DataStorage.formatCurrency(order.total_amount || 0) : '-' + window.DataStorage.formatCurrency(order.total_amount || 0)
         ]));
     }
 

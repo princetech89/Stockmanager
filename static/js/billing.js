@@ -63,12 +63,12 @@ class BillingManager {
     }
 
     loadSettings() {
-        this.settings = DataStorage.getSettings();
+        this.settings = window.DataStorage.getSettings();
     }
 
     async loadProducts() {
         try {
-            this.products = await DataStorage.getProducts();
+            this.products = await window.DataStorage.getProducts();
         } catch (error) {
             console.error('Error loading products:', error);
             showNotification('Failed to load products for billing', 'error');
@@ -77,7 +77,7 @@ class BillingManager {
 
     loadInvoices() {
         try {
-            this.invoices = DataStorage.getInvoices();
+            this.invoices = window.DataStorage.getInvoices();
             this.renderInvoicesTable();
         } catch (error) {
             console.error('Error loading invoices:', error);
@@ -232,7 +232,7 @@ class BillingManager {
         const totalAmount = baseAmount + gstAmount;
 
         // Update display
-        amountSpan.textContent = DataStorage.formatCurrency(totalAmount);
+        amountSpan.textContent = window.DataStorage.formatCurrency(totalAmount);
         totalValue.value = totalAmount;
         gstValue.value = gstAmount;
 
@@ -286,11 +286,11 @@ class BillingManager {
         const grandTotal = subtotal + totalGST;
 
         // Update summary display
-        document.getElementById('subtotal').textContent = DataStorage.formatCurrency(subtotal);
-        document.getElementById('cgstAmount').textContent = DataStorage.formatCurrency(totalCGST);
-        document.getElementById('sgstAmount').textContent = DataStorage.formatCurrency(totalSGST);
-        document.getElementById('igstAmount').textContent = DataStorage.formatCurrency(totalIGST);
-        document.getElementById('totalAmount').textContent = DataStorage.formatCurrency(grandTotal);
+        document.getElementById('subtotal').textContent = window.DataStorage.formatCurrency(subtotal);
+        document.getElementById('cgstAmount').textContent = window.DataStorage.formatCurrency(totalCGST);
+        document.getElementById('sgstAmount').textContent = window.DataStorage.formatCurrency(totalSGST);
+        document.getElementById('igstAmount').textContent = window.DataStorage.formatCurrency(totalIGST);
+        document.getElementById('totalAmount').textContent = window.DataStorage.formatCurrency(grandTotal);
     }
 
     getStateFromGST(gstNumber) {
@@ -427,7 +427,7 @@ class BillingManager {
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
             doc.text(`Invoice #: ${invoice.invoice_number}`, 140, 25);
-            doc.text(`Date: ${DataStorage.formatDate(invoice.created_at)}`, 140, 35);
+            doc.text(`Date: ${window.DataStorage.formatDate(invoice.created_at)}`, 140, 35);
             
             // Business details
             let yPos = 45;
@@ -526,7 +526,7 @@ class BillingManager {
             yPos += 10;
             
             doc.setFontSize(10);
-            doc.text(`Subtotal: ${DataStorage.formatCurrency(invoice.subtotal)}`, 130, yPos);
+            doc.text(`Subtotal: ${window.DataStorage.formatCurrency(invoice.subtotal)}`, 130, yPos);
             yPos += 8;
             
             // GST breakdown
@@ -535,19 +535,19 @@ class BillingManager {
             const isInterState = customerState && customerState !== businessState;
             
             if (isInterState) {
-                doc.text(`IGST: ${DataStorage.formatCurrency(invoice.total_gst)}`, 130, yPos);
+                doc.text(`IGST: ${window.DataStorage.formatCurrency(invoice.total_gst)}`, 130, yPos);
                 yPos += 8;
             } else {
                 const halfGST = invoice.total_gst / 2;
-                doc.text(`CGST: ${DataStorage.formatCurrency(halfGST)}`, 130, yPos);
+                doc.text(`CGST: ${window.DataStorage.formatCurrency(halfGST)}`, 130, yPos);
                 yPos += 8;
-                doc.text(`SGST: ${DataStorage.formatCurrency(halfGST)}`, 130, yPos);
+                doc.text(`SGST: ${window.DataStorage.formatCurrency(halfGST)}`, 130, yPos);
                 yPos += 8;
             }
             
             doc.setFontSize(12);
             doc.setFont('helvetica', 'bold');
-            doc.text(`Total: ${DataStorage.formatCurrency(invoice.grand_total)}`, 130, yPos);
+            doc.text(`Total: ${window.DataStorage.formatCurrency(invoice.grand_total)}`, 130, yPos);
             
             // Footer
             doc.setFontSize(8);
@@ -603,9 +603,9 @@ class BillingManager {
                             ${invoice.customer_mobile ? `<br><small>${invoice.customer_mobile}</small>` : ''}
                         </div>
                     </td>
-                    <td>${DataStorage.formatDate(invoice.created_at)}</td>
-                    <td class="text-right">${DataStorage.formatCurrency(invoice.subtotal)}</td>
-                    <td class="text-right">${DataStorage.formatCurrency(invoice.total_gst)}</td>
+                    <td>${window.DataStorage.formatDate(invoice.created_at)}</td>
+                    <td class="text-right">${window.DataStorage.formatCurrency(invoice.subtotal)}</td>
+                    <td class="text-right">${window.DataStorage.formatCurrency(invoice.total_gst)}</td>
                     <td>
                         <span class="status-badge ${statusBadge.class}">
                             ${statusBadge.text}
@@ -682,7 +682,7 @@ class BillingManager {
                 <div class="invoice-header">
                     <div class="invoice-title">
                         <h3>Invoice ${invoice.invoice_number}</h3>
-                        <p class="text-secondary">Generated on ${DataStorage.formatDate(invoice.created_at)}</p>
+                        <p class="text-secondary">Generated on ${window.DataStorage.formatDate(invoice.created_at)}</p>
                     </div>
                 </div>
                 
@@ -722,9 +722,9 @@ class BillingManager {
                                         <td>${product ? product.name : 'Unknown Product'}</td>
                                         <td>${product ? product.hsn_code : ''}</td>
                                         <td>${item.quantity}</td>
-                                        <td>${DataStorage.formatCurrency(item.rate)}</td>
+                                        <td>${window.DataStorage.formatCurrency(item.rate)}</td>
                                         <td>${item.gst_rate}%</td>
-                                        <td>${DataStorage.formatCurrency(item.total_amount)}</td>
+                                        <td>${window.DataStorage.formatCurrency(item.total_amount)}</td>
                                     </tr>
                                 `;
                             }).join('')}
@@ -735,26 +735,26 @@ class BillingManager {
                 <div class="invoice-totals">
                     <div class="totals-row">
                         <span>Subtotal:</span>
-                        <span>${DataStorage.formatCurrency(invoice.subtotal)}</span>
+                        <span>${window.DataStorage.formatCurrency(invoice.subtotal)}</span>
                     </div>
                     ${isInterState ? `
                         <div class="totals-row">
                             <span>IGST:</span>
-                            <span>${DataStorage.formatCurrency(invoice.total_gst)}</span>
+                            <span>${window.DataStorage.formatCurrency(invoice.total_gst)}</span>
                         </div>
                     ` : `
                         <div class="totals-row">
                             <span>CGST:</span>
-                            <span>${DataStorage.formatCurrency(invoice.total_gst / 2)}</span>
+                            <span>${window.DataStorage.formatCurrency(invoice.total_gst / 2)}</span>
                         </div>
                         <div class="totals-row">
                             <span>SGST:</span>
-                            <span>${DataStorage.formatCurrency(invoice.total_gst / 2)}</span>
+                            <span>${window.DataStorage.formatCurrency(invoice.total_gst / 2)}</span>
                         </div>
                     `}
                     <div class="totals-row total">
                         <span><strong>Total:</strong></span>
-                        <span><strong>${DataStorage.formatCurrency(invoice.grand_total)}</strong></span>
+                        <span><strong>${window.DataStorage.formatCurrency(invoice.grand_total)}</strong></span>
                     </div>
                 </div>
             </div>

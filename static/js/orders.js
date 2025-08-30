@@ -188,17 +188,17 @@ class OrdersManager {
                     </td>
                     <td>
                         <div class="date-info">
-                            ${DataStorage.formatDate(order.created_at)}
+                            ${window.DataStorage.formatDate(order.created_at)}
                             <br><small class="text-secondary">${this.getTimeFromDate(order.created_at)}</small>
                         </div>
                     </td>
                     <td class="text-center">${order.items || 0}</td>
                     <td class="text-right">
-                        <strong>${DataStorage.formatCurrency(order.total_amount || 0)}</strong>
+                        <strong>${window.DataStorage.formatCurrency(order.total_amount || 0)}</strong>
                         <br><small class="text-secondary">Base amount</small>
                     </td>
                     <td class="text-right">
-                        <strong>${DataStorage.formatCurrency(order.gst_amount || 0)}</strong>
+                        <strong>${window.DataStorage.formatCurrency(order.gst_amount || 0)}</strong>
                         <br><small class="text-secondary">Tax amount</small>
                     </td>
                     <td>
@@ -575,7 +575,7 @@ class OrdersManager {
         const rate = parseFloat(rateInput.value) || 0;
         const amount = quantity * rate;
 
-        amountSpan.textContent = DataStorage.formatCurrency(amount);
+        amountSpan.textContent = window.DataStorage.formatCurrency(amount);
 
         // Update order summary
         this.updateOrderSummary();
@@ -600,9 +600,9 @@ class OrdersManager {
 
         const total = subtotal + totalGST;
 
-        document.getElementById('orderSubtotal').textContent = DataStorage.formatCurrency(subtotal);
-        document.getElementById('orderGST').textContent = DataStorage.formatCurrency(totalGST);
-        document.getElementById('orderTotal').textContent = DataStorage.formatCurrency(total);
+        document.getElementById('orderSubtotal').textContent = window.DataStorage.formatCurrency(subtotal);
+        document.getElementById('orderGST').textContent = window.DataStorage.formatCurrency(totalGST);
+        document.getElementById('orderTotal').textContent = window.DataStorage.formatCurrency(total);
     }
 
     async saveOrder() {
@@ -747,7 +747,7 @@ class OrdersManager {
             'Type': order.order_type,
             'Customer': order.customer_name || 'N/A',
             'Mobile': order.customer_mobile || 'N/A',
-            'Date': DataStorage.formatDate(order.created_at),
+            'Date': window.DataStorage.formatDate(order.created_at),
             'Items': order.items || 0,
             'Base Amount': order.total_amount || 0,
             'GST Amount': order.gst_amount || 0,
