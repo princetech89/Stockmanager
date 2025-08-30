@@ -11,7 +11,22 @@ import calendar
 
 @app.route('/')
 def landing():
-    return render_template('landing.html')
+    # Get real statistics from the database
+    total_products = db.session.query(Product).count()
+    total_stock = db.session.query(func.sum(Stock.available_qty)).scalar() or 0
+    total_orders = db.session.query(Order).count()
+    
+    # Calculate accuracy based on completed orders vs total orders
+    completed_orders = db.session.query(Order).filter(Order.status == 'completed').count()
+    accuracy = round((completed_orders / max(total_orders, 1)) * 100) if total_orders > 0 else 0
+    
+    stats = {
+        'total_products': total_products,
+        'total_stock': total_stock,
+        'accuracy': accuracy
+    }
+    
+    return render_template('landing.html', stats=stats)
 
 @app.route('/dashboard')
 def dashboard():

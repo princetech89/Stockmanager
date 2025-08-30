@@ -66,15 +66,15 @@
                 </div>
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <span class="stat-number" data-target="500">0</span>
+                        <span class="stat-number" data-target="{{ stats.total_products or 0 }}">0</span>
                         <span class="stat-label">Products Managed</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number" data-target="50">0</span>
-                        <span class="stat-label">Happy Businesses</span>
+                        <span class="stat-number" data-target="{{ stats.total_stock or 0 }}">0</span>
+                        <span class="stat-label">Total Stock</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number" data-target="99">0</span>
+                        <span class="stat-number" data-target="{{ stats.accuracy or 0 }}">0</span>
                         <span class="stat-label">% Accuracy</span>
                     </div>
                 </div>
