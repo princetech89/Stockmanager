@@ -63,6 +63,49 @@ class DataStorage {
         }
     }
 
+    // Enhanced features methods
+    async getLowStockAlerts() {
+        try {
+            const response = await this.apiRequest('/enhanced/low-stock-alerts');
+            return response || [];
+        } catch (error) {
+            console.error('Failed to get low stock alerts:', error);
+            return [];
+        }
+    }
+
+    async getProfitAnalytics() {
+        try {
+            const response = await this.apiRequest('/enhanced/profit-analytics');
+            return response || {
+                total_revenue: 0,
+                total_cost: 0,
+                gross_profit: 0,
+                profit_margin: 0,
+                top_products: []
+            };
+        } catch (error) {
+            console.error('Failed to get profit analytics:', error);
+            return {
+                total_revenue: 0,
+                total_cost: 0,
+                gross_profit: 0,
+                profit_margin: 0,
+                top_products: []
+            };
+        }
+    }
+
+    async generateInvoiceQR(orderId) {
+        try {
+            const response = await this.apiRequest(`/enhanced/upi-qr/${orderId}`);
+            return response || null;
+        } catch (error) {
+            console.error('Failed to generate invoice QR:', error);
+            return null;
+        }
+    }
+
     /**
      * API Communication Methods
      */

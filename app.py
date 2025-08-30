@@ -32,9 +32,23 @@ with app.app_context():
     # Import models to ensure tables are created
     import models
     db.create_all()
+    
+    # Initialize GST states
+    try:
+        models.GSTState.initialize_states()
+        db.session.commit()
+        print("Database initialized with GST states")
+    except Exception as e:
+        print(f"Error initializing GST states: {e}")
 
-# Import routes after app initialization
+# Import routes and enhanced features after app initialization
 import routes
+try:
+    from enhanced_features import enhanced_bp
+    app.register_blueprint(enhanced_bp)
+    print("Enhanced features loaded successfully")
+except ImportError as e:
+    print(f"Enhanced features not loaded: {e}")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -1,8 +1,11 @@
 from flask import render_template, request, jsonify, redirect, url_for
 from app import app, db
-from models import Product, Stock, Order, OrderItem, Supplier
+from models import Product, Stock, Order, OrderItem, Supplier, ProductBatch, Customer, CreditTransaction, GSTState
 from datetime import datetime, timedelta
 import json
+import qrcode
+import io
+import base64
 
 @app.route('/')
 def dashboard():
@@ -27,6 +30,51 @@ def reports():
 @app.route('/settings')
 def settings():
     return render_template('settings.html')
+
+# Utility Functions
+def calculate_gst_split(amount, gst_rate, business_state_code, customer_gst):
+    """Calculate CGST/SGST or IGST based on state codes"""
+    gst_amount = (amount * gst_rate) / 100
+    
+    # Get customer state from GST number (first 2 digits)
+    if customer_gst and len(customer_gst) >= 2:
+        customer_state_code = customer_gst[:2]
+    else:
+        customer_state_code = business_state_code  # Same state if no GST
+    
+    if customer_state_code == business_state_code:
+        # Same state - CGST + SGST
+        return {
+            'cgst': gst_amount / 2,
+            'sgst': gst_amount / 2,
+            'igst': 0,
+            'total_gst': gst_amount
+        }
+    else:
+        # Different state - IGST
+        return {
+            'cgst': 0,
+            'sgst': 0,
+            'igst': gst_amount,
+            'total_gst': gst_amount
+        }
+
+def generate_upi_qr(amount, business_name, order_number):
+    """Generate UPI QR code for payment"""
+    # UPI URL format: upi://pay?pa=UPI_ID&pn=NAME&am=AMOUNT&cu=INR&tn=DESCRIPTION
+    upi_url = f"upi://pay?pa=merchant@upi&pn={business_name}&am={amount}&cu=INR&tn=Invoice {order_number}"
+    
+    qr = qrcode.QRCode(version=1, box_size=6, border=5)
+    qr.add_data(upi_url)
+    qr.make(fit=True)
+    
+    img = qr.make_image(fill_color="black", back_color="white")
+    buffer = io.BytesIO()
+    img.save(buffer, format='PNG')
+    buffer.seek(0)
+    
+    # Return base64 encoded image
+    return base64.b64encode(buffer.getvalue()).decode()
 
 # API Routes for data operations
 @app.route('/api/dashboard-stats')
