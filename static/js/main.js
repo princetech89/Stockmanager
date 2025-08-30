@@ -105,6 +105,14 @@ class StockManagementApp {
             });
         }
 
+        // Close profile dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const profileMenu = document.querySelector('.profile-menu');
+            if (profileMenu && !profileMenu.contains(e.target)) {
+                profileMenu.classList.remove('active');
+            }
+        });
+
         // Auto-close on inactivity (optional)
         let inactivityTimer;
         const resetInactivityTimer = () => {
@@ -617,6 +625,14 @@ class StockManagementApp {
 
     generateId() {
         return Date.now().toString(36) + Math.random().toString(36).substr(2);
+    }
+
+    toggleProfileDropdown() {
+        const profileMenu = document.querySelector('.profile-menu');
+        if (profileMenu) {
+            profileMenu.classList.toggle('active');
+            console.log('Profile dropdown toggled:', profileMenu.classList.contains('active'));
+        }
     }
 }
 

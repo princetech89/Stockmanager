@@ -907,3 +907,90 @@ body {
         border-radius: 20px !important;
     }
 }
+
+/* Profile Dropdown Menu */
+.profile-menu {
+    position: relative !important;
+    cursor: pointer !important;
+}
+
+.profile-dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    background: white !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15) !important;
+    border: 1px solid var(--solid-border) !important;
+    min-width: 200px !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(-10px) scale(0.95) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    z-index: 1300 !important;
+    overflow: hidden !important;
+    margin-top: 8px !important;
+}
+
+.profile-menu.active .profile-dropdown-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) scale(1) !important;
+}
+
+.dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
+    color: var(--text-primary) !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    border-bottom: 1px solid var(--solid-border) !important;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none !important;
+}
+
+.dropdown-item:hover {
+    background: var(--solid-bg-secondary) !important;
+    color: var(--accent-primary) !important;
+}
+
+.dropdown-item.logout:hover {
+    background: var(--accent-danger) !important;
+    color: white !important;
+}
+
+.dropdown-item i {
+    width: 16px !important;
+    font-size: 14px !important;
+    text-align: center !important;
+}
+
+.dropdown-divider {
+    height: 1px !important;
+    background: var(--solid-border) !important;
+    margin: 4px 0 !important;
+}
+
+/* Profile menu active state */
+.profile-menu.active .profile-dropdown i {
+    transform: rotate(180deg) !important;
+}
+
+/* Enhanced profile menu styling */
+.profile-menu:hover {
+    background: rgba(139, 92, 246, 0.1) !important;
+    border-radius: 12px !important;
+}
+
+.profile-menu.active {
+    background: rgba(139, 92, 246, 0.15) !important;
+    border-radius: 12px !important;
+}
+
+.profile-dropdown i {
+    transition: transform 0.3s ease !important;
+}
