@@ -379,81 +379,158 @@ class InventoryManager {
     }
 
     openAddProductModal() {
-        const modalContent = `
-            <form id="addProductForm">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="productName">Product Name *</label>
-                        <input type="text" class="form-control" id="productName" required>
+        this.openAnimatedSidePanel();
+    }
+
+    openAnimatedSidePanel() {
+        // Remove existing panels
+        const existing = document.querySelector('.side-panel');
+        if (existing) {
+            existing.remove();
+        }
+        const existingBackdrop = document.querySelector('.side-panel-backdrop');
+        if (existingBackdrop) {
+            existingBackdrop.remove();
+        }
+
+        // Create backdrop
+        const backdrop = document.createElement('div');
+        backdrop.className = 'side-panel-backdrop';
+        backdrop.onclick = () => this.closeSidePanel();
+        document.body.appendChild(backdrop);
+
+        // Create side panel
+        const panel = document.createElement('div');
+        panel.className = 'side-panel';
+        panel.innerHTML = `
+            <div class="side-panel-header">
+                <h2 class="side-panel-title">
+                    <i class="fas fa-plus"></i>
+                    Add New Product
+                </h2>
+                <button class="side-panel-close" onclick="inventoryManager.closeSidePanel()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="side-panel-body">
+                <div class="form-progress">
+                    <div class="form-progress-bar">
+                        <div class="form-progress-fill" id="formProgressFill" style="width: 0%"></div>
                     </div>
-                    <div class="form-group">
-                        <label for="productSKU">SKU *</label>
-                        <input type="text" class="form-control" id="productSKU" required>
-                        <small class="text-secondary">Leave blank to auto-generate</small>
-                    </div>
+                    <div class="form-progress-text" id="formProgressText">0% Complete</div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="productHSN">HSN Code *</label>
-                        <input type="text" class="form-control" id="productHSN" required>
+                
+                <form id="addProductForm">
+                    <div class="form-row animated">
+                        <div class="form-group animated">
+                            <label class="form-label" for="productName">Product Name *</label>
+                            <input type="text" class="form-control animated" id="productName" required placeholder="Enter product name">
+                        </div>
+                        <div class="form-group animated">
+                            <label class="form-label" for="productSKU">SKU *</label>
+                            <input type="text" class="form-control animated" id="productSKU" required placeholder="Auto-generated">
+                            <small class="text-secondary">Leave blank to auto-generate</small>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="productCategory">Category *</label>
-                        <input type="text" class="form-control" id="productCategory" list="categoryList" required>
-                        <datalist id="categoryList">
-                            ${this.getCategoryOptions()}
-                        </datalist>
+                    
+                    <div class="form-row animated">
+                        <div class="form-group animated">
+                            <label class="form-label" for="productHSN">HSN Code *</label>
+                            <input type="text" class="form-control animated" id="productHSN" required placeholder="HSN/SAC code">
+                        </div>
+                        <div class="form-group animated">
+                            <label class="form-label" for="productCategory">Category *</label>
+                            <input type="text" class="form-control animated" id="productCategory" list="categoryList" required placeholder="Select or create category">
+                            <datalist id="categoryList">
+                                ${this.getCategoryOptions()}
+                            </datalist>
+                        </div>
                     </div>
+                    
+                    <div class="form-row animated">
+                        <div class="form-group animated">
+                            <label class="form-label" for="productPrice">Unit Price (₹) *</label>
+                            <input type="number" class="form-control animated" id="productPrice" step="0.01" min="0" required placeholder="0.00">
+                        </div>
+                        <div class="form-group animated">
+                            <label class="form-label" for="productGST">GST Rate (%) *</label>
+                            <select class="form-control animated" id="productGST" required>
+                                <option value="0">0% (Exempt)</option>
+                                <option value="5">5%</option>
+                                <option value="12">12%</option>
+                                <option value="18" selected>18%</option>
+                                <option value="28">28%</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row animated">
+                        <div class="form-group animated">
+                            <label class="form-label" for="productStock">Initial Stock</label>
+                            <input type="number" class="form-control animated" id="productStock" min="0" value="0" placeholder="0">
+                        </div>
+                        <div class="form-group animated">
+                            <label class="form-label" for="productMinQty">Minimum Quantity</label>
+                            <input type="number" class="form-control animated" id="productMinQty" min="0" value="10" placeholder="10">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group animated">
+                        <label class="form-label" for="productDescription">Description</label>
+                        <textarea class="form-control animated" id="productDescription" rows="3" placeholder="Optional product description..."></textarea>
+                    </div>
+                </form>
+            </div>
+            
+            <div class="side-panel-footer">
+                <button type="button" class="btn btn-secondary animated" onclick="inventoryManager.closeSidePanel()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary animated" id="saveProductBtn" onclick="inventoryManager.saveProduct()">
+                    <i class="fas fa-plus"></i>
+                    Add Product
+                </button>
+            </div>
+            
+            <div class="side-panel-loading" id="sidePanelLoading">
+                <div>
+                    <div class="loading-spinner"></div>
+                    <p style="margin-top: 15px; color: var(--text-secondary);">Saving product...</p>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="productPrice">Unit Price (₹) *</label>
-                        <input type="number" class="form-control" id="productPrice" step="0.01" min="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="productGST">GST Rate (%) *</label>
-                        <select class="form-control" id="productGST" required>
-                            <option value="0">0% (Exempt)</option>
-                            <option value="5">5%</option>
-                            <option value="12">12%</option>
-                            <option value="18" selected>18%</option>
-                            <option value="28">28%</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="productStock">Initial Stock</label>
-                        <input type="number" class="form-control" id="productStock" min="0" value="0">
-                    </div>
-                    <div class="form-group">
-                        <label for="productMinQty">Minimum Quantity</label>
-                        <input type="number" class="form-control" id="productMinQty" min="0" value="10">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="productDescription">Description</label>
-                    <textarea class="form-control" id="productDescription" rows="3"></textarea>
-                </div>
-            </form>
+            </div>
         `;
+        
+        document.body.appendChild(panel);
+        
+        // Trigger animations
+        setTimeout(() => {
+            backdrop.classList.add('active');
+            panel.classList.add('active');
+        }, 10);
 
-        const actions = [
-            {
-                text: 'Cancel',
-                class: 'btn-secondary',
-                onclick: 'app.closeModal()'
-            },
-            {
-                text: 'Add Product',
-                class: 'btn-primary',
-                icon: 'fas fa-plus',
-                onclick: 'inventoryManager.saveProduct()'
-            }
-        ];
+        // Set up form interactions
+        this.setupFormInteractions();
+    }
 
-        app.createModal('Add New Product', modalContent, actions);
+    closeSidePanel() {
+        const panel = document.querySelector('.side-panel');
+        const backdrop = document.querySelector('.side-panel-backdrop');
+        
+        if (panel && backdrop) {
+            panel.classList.remove('active');
+            panel.classList.add('closing');
+            backdrop.classList.remove('active');
+            
+            setTimeout(() => {
+                panel.remove();
+                backdrop.remove();
+            }, 400);
+        }
+    }
 
+    setupFormInteractions() {
         // Auto-generate SKU when name or category changes
         const nameField = document.getElementById('productName');
         const categoryField = document.getElementById('productCategory');
@@ -464,12 +541,170 @@ class InventoryManager {
                 const sku = window.DataStorage.generateSKU(nameField.value, categoryField.value);
                 if (!skuField.value) {
                     skuField.value = sku;
+                    // Add a subtle animation to show the SKU was generated
+                    skuField.style.background = 'rgba(59, 130, 246, 0.1)';
+                    setTimeout(() => {
+                        skuField.style.background = '';
+                    }, 1000);
                 }
             }
         };
 
         nameField.addEventListener('blur', generateSKU);
         categoryField.addEventListener('blur', generateSKU);
+
+        // Add focus ripple effect to form fields
+        document.querySelectorAll('.form-control.animated').forEach(field => {
+            field.addEventListener('focus', (e) => {
+                e.target.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            field.addEventListener('blur', (e) => {
+                e.target.parentElement.style.transform = 'scale(1)';
+            });
+
+            // Track form completion progress
+            field.addEventListener('input', () => {
+                this.updateFormProgress();
+                this.validateField(field);
+            });
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.querySelector('.side-panel.active')) {
+                this.closeSidePanel();
+            }
+        });
+    }
+
+    showSuccessState() {
+        const loadingEl = document.getElementById('sidePanelLoading');
+        if (loadingEl) {
+            loadingEl.innerHTML = `
+                <div>
+                    <div class="success-checkmark"></div>
+                    <p style="margin-top: 15px; color: var(--success-color); font-weight: 500;">Product saved successfully!</p>
+                </div>
+            `;
+        }
+    }
+
+    hideLoadingState() {
+        const loadingEl = document.getElementById('sidePanelLoading');
+        const saveBtn = document.getElementById('saveProductBtn');
+        
+        if (loadingEl) {
+            loadingEl.classList.remove('active');
+        }
+        
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="fas fa-plus"></i> Add Product';
+        }
+    }
+
+    updateFormProgress() {
+        const requiredFields = ['productName', 'productSKU', 'productHSN', 'productCategory', 'productPrice', 'productGST'];
+        let completedFields = 0;
+
+        requiredFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field && field.value.trim()) {
+                completedFields++;
+            }
+        });
+
+        const progressPercent = Math.round((completedFields / requiredFields.length) * 100);
+        const progressFill = document.getElementById('formProgressFill');
+        const progressText = document.getElementById('formProgressText');
+
+        if (progressFill) {
+            progressFill.style.width = progressPercent + '%';
+        }
+
+        if (progressText) {
+            progressText.textContent = progressPercent + '% Complete';
+            
+            if (progressPercent === 100) {
+                progressText.textContent = '✓ Ready to Save!';
+                progressText.style.color = 'var(--success-color)';
+            } else {
+                progressText.style.color = 'var(--text-secondary)';
+            }
+        }
+    }
+
+    validateField(field) {
+        // Remove existing validation messages and classes
+        const existingMessage = field.parentElement.querySelector('.form-validation-message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+        field.classList.remove('error', 'success');
+
+        // Check if field is required and empty
+        if (field.hasAttribute('required') && !field.value.trim()) {
+            this.showFieldError(field, 'This field is required');
+            return false;
+        }
+
+        // Validate specific field types
+        switch (field.type) {
+            case 'number':
+                if (field.value && (isNaN(field.value) || parseFloat(field.value) < 0)) {
+                    this.showFieldError(field, 'Please enter a valid positive number');
+                    return false;
+                }
+                break;
+            case 'email':
+                if (field.value && !/\S+@\S+\.\S+/.test(field.value)) {
+                    this.showFieldError(field, 'Please enter a valid email address');
+                    return false;
+                }
+                break;
+        }
+
+        // SKU validation
+        if (field.id === 'productSKU' && field.value) {
+            if (field.value.length < 3) {
+                this.showFieldError(field, 'SKU must be at least 3 characters');
+                return false;
+            }
+        }
+
+        // HSN code validation
+        if (field.id === 'productHSN' && field.value) {
+            if (!/^\d+$/.test(field.value) || (field.value.length !== 4 && field.value.length !== 6 && field.value.length !== 8)) {
+                this.showFieldError(field, 'HSN code must be 4, 6, or 8 digits');
+                return false;
+            }
+        }
+
+        // Show success for valid fields
+        if (field.value.trim()) {
+            field.classList.add('success');
+        }
+
+        return true;
+    }
+
+    showFieldError(field, message) {
+        field.classList.add('error');
+        
+        const errorMessage = document.createElement('div');
+        errorMessage.className = 'form-validation-message error';
+        errorMessage.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+        
+        field.parentElement.appendChild(errorMessage);
+        
+        // Auto-remove error after field is corrected
+        const removeErrorHandler = () => {
+            if (field.value.trim() && this.validateField(field)) {
+                field.removeEventListener('input', removeErrorHandler);
+            }
+        };
+        field.addEventListener('input', removeErrorHandler);
     }
 
     getCategoryOptions() {
@@ -501,7 +736,18 @@ class InventoryManager {
         }
 
         try {
-            app.showLoading('saveProductBtn');
+            // Show animated loading state
+            const loadingEl = document.getElementById('sidePanelLoading');
+            const saveBtn = document.getElementById('saveProductBtn');
+            
+            if (loadingEl) {
+                loadingEl.classList.add('active');
+            }
+            
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            }
             
             let result;
             if (isEdit && productId) {
@@ -511,18 +757,23 @@ class InventoryManager {
             }
 
             if (result.success) {
-                showNotification(result.message || `Product ${isEdit ? 'updated' : 'added'} successfully`, 'success');
-                app.closeModal();
-                await this.loadProducts();
-                this.loadCategories();
+                // Show success animation
+                this.showSuccessState();
+                
+                setTimeout(async () => {
+                    showNotification(result.message || `Product ${isEdit ? 'updated' : 'added'} successfully`, 'success');
+                    this.closeSidePanel();
+                    await this.loadProducts();
+                    this.loadCategories();
+                }, 1500);
             } else {
+                this.hideLoadingState();
                 showNotification(result.error || 'Failed to save product', 'error');
             }
         } catch (error) {
             console.error('Error saving product:', error);
+            this.hideLoadingState();
             showNotification('Failed to save product', 'error');
-        } finally {
-            app.hideLoading('saveProductBtn', isEdit ? 'Update Product' : 'Add Product');
         }
     }
 
