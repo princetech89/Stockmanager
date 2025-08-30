@@ -82,7 +82,7 @@ class OrdersManager {
 
     async loadProducts() {
         try {
-            this.products = await DataStorage.getProducts();
+            this.products = await window.DataStorage.getProducts();
         } catch (error) {
             console.error('Error loading products:', error);
         }
@@ -91,7 +91,7 @@ class OrdersManager {
     async loadOrders() {
         try {
             this.showTableLoading();
-            this.orders = await DataStorage.getOrders(this.currentOrderType);
+            this.orders = await window.DataStorage.getOrders(this.currentOrderType);
             this.applyFilters();
         } catch (error) {
             console.error('Error loading orders:', error);
@@ -655,7 +655,7 @@ class OrdersManager {
         }
 
         try {
-            const result = await DataStorage.createOrder(orderData);
+            const result = await window.DataStorage.createOrder(orderData);
             
             if (result.success) {
                 showNotification(result.message || 'Order created successfully', 'success');
