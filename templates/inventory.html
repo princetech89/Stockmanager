@@ -6,7 +6,7 @@
 <div class="page-header">
     <h1 class="page-title">Inventory Management</h1>
     <div class="page-actions">
-        <button class="btn btn-primary" onclick="openModernSidePanel()">
+        <button class="btn btn-primary" onclick="openSimplePanel()">
             <i class="fas fa-plus"></i>
             Add Product
         </button>
@@ -87,11 +87,11 @@
 {% block scripts %>
 <script src="{{ url_for('static', filename='js/data-storage.js') }}"></script>
 <script src="{{ url_for('static', filename='js/inventory.js') }}"></script>
-<script src="{{ url_for('static', filename='js/modern-sidepanel.js') }}"></script>
+<script src="{{ url_for('static', filename='js/simple-panel.js') }}"></script>
 <script>
 // Initialize inventory manager when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Initializing modern inventory system...');
+    console.log('Initializing clean inventory system...');
     if (typeof InventoryManager !== 'undefined') {
         window.inventoryManager = new InventoryManager();
         window.inventoryManager.init();

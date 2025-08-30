@@ -3259,3 +3259,81 @@ canvas {
 .side-panel-backdrop:hover {
     background: rgba(0, 0, 0, 0.6) !important;
 }
+
+/* Fix Number Visibility - High Contrast */
+.metric-value {
+    color: #000 !important;
+    font-weight: 800 !important;
+    font-size: 32px !important;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8) !important;
+}
+
+.metric-label {
+    color: #333 !important;
+    font-weight: 600 !important;
+}
+
+.data-table td {
+    color: #000 !important;
+    font-weight: 500 !important;
+}
+
+.data-table th {
+    color: #000 !important;
+    font-weight: 700 !important;
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Price and numeric values */
+.price-value,
+.numeric-value,
+.stock-value {
+    color: #000 !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+}
+
+/* Form text visibility */
+.form-control {
+    color: #000 !important;
+    font-weight: 500 !important;
+}
+
+/* Page title and text */
+.page-title {
+    color: #000 !important;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Table cells with numbers */
+.data-table tbody tr td:nth-child(5), /* Price column */
+.data-table tbody tr td:nth-child(6), /* GST column */
+.data-table tbody tr td:nth-child(7), /* Stock column */
+.data-table tbody tr td:nth-child(8)  /* Min Qty column */
+{
+    color: #000 !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+}
+
+/* Chart titles and labels */
+.chart-header h3 {
+    color: #000 !important;
+    font-weight: 700 !important;
+}
+
+/* All text in main content area */
+.main-content {
+    color: #000 !important;
+}
+
+.page-content * {
+    color: #000 !important;
+}
+
+/* Override glassmorphism text issues */
+.glassmorphism .metric-value,
+.glass-card .metric-value {
+    color: #000 !important;
+    text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9) !important;
+}

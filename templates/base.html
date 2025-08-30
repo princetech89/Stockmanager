@@ -16,12 +16,10 @@
     <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
     
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-theme.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/modern-sidepanel.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20250830clean">
     
     <!-- Device Detection Script -->
     <script src="{{ url_for('static', filename='js/device-detector.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/modern-sidepanel.js') }}"></script>
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -35,8 +33,12 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    <!-- Modern Background -->
-    <div class="modern-background"></div>
+    <!-- Animated Background Gradient Blobs -->
+    <div class="dashboard-background">
+        <div class="gradient-blob blob-1"></div>
+        <div class="gradient-blob blob-2"></div>
+        <div class="gradient-blob blob-3"></div>
+    </div>
     
     <!-- Sidebar -->
     <nav class="sidebar" id="sidebar">
