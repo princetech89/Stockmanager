@@ -572,8 +572,8 @@ class AdvancedAnalyticsManager {
         document.getElementById('salesForecastChart').innerHTML = '';
         document.getElementById('salesForecastChart').appendChild(ctx);
 
-        const data = this.analyticsData.salesForecast;
-        const allData = [...data.historical, ...data.forecast];
+        const data = this.analyticsData.salesForecast || { historical: [], forecast: [] };
+        const allData = [...(data.historical || []), ...(data.forecast || [])];
 
         this.charts.salesForecast = new Chart(ctx, {
             type: 'line',
@@ -581,14 +581,14 @@ class AdvancedAnalyticsManager {
                 labels: allData.map(d => d.month),
                 datasets: [{
                     label: 'Historical Sales',
-                    data: data.historical.map(d => d.sales),
+                    data: (data.historical || []).map(d => d.sales || 0),
                     borderColor: '#3b82f6',
                     backgroundColor: 'rgba(59, 130, 246, 0.1)',
                     borderWidth: 2,
                     fill: true
                 }, {
                     label: 'Forecast',
-                    data: Array(data.historical.length).fill(null).concat(data.forecast.map(d => d.sales)),
+                    data: Array((data.historical || []).length).fill(null).concat((data.forecast || []).map(d => d.sales || 0)),
                     borderColor: '#ef4444',
                     backgroundColor: 'rgba(239, 68, 68, 0.1)',
                     borderWidth: 2,
@@ -802,9 +802,13 @@ class AdvancedAnalyticsManager {
         const forecastInsights = document.getElementById('forecastInsights');
         if (!forecastInsights) return;
 
-        const data = this.analyticsData.salesForecast;
-        const lastHistorical = data.historical[data.historical.length - 1].sales;
-        const firstForecast = data.forecast[0].sales;
+        const data = this.analyticsData.salesForecast || { historical: [], forecast: [] };
+        if (!data.historical || data.historical.length === 0 || !data.forecast || data.forecast.length === 0) {
+            forecastInsights.innerHTML = '<div class="no-data-message">No forecast data available</div>';
+            return;
+        }
+        const lastHistorical = data.historical[data.historical.length - 1].sales || 0;
+        const firstForecast = data.forecast[0].sales || 0;
         const growthRate = ((firstForecast - lastHistorical) / lastHistorical * 100);
 
         const insights = [

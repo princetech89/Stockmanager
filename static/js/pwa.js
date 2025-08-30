@@ -140,7 +140,8 @@ class PWAManager {
                     });
                 });
             } catch (error) {
-                console.error('Service Worker registration failed:', error);
+                console.log('Service Worker registration failed:', error);
+                // This is normal in development - PWA works better in production
             }
         }
     }
