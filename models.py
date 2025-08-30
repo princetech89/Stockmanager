@@ -104,7 +104,7 @@ class Order(db.Model):
             'order_date': self.order_date.isoformat() if self.order_date else None,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            'order_items': [item.to_dict() for item in self.order_items]
+            'order_items': [item.to_dict() for item in (self.order_items or [])]
         }
 
 class OrderItem(db.Model):
@@ -126,6 +126,11 @@ class OrderItem(db.Model):
         return f'<OrderItem Order:{self.order_id} Product:{self.product_id} Qty:{self.quantity}>'
     
     def to_dict(self):
+        product_name = None
+        product_sku = None
+        if hasattr(self, 'product') and self.product:
+            product_name = self.product.name
+            product_sku = self.product.sku
         return {
             'id': self.id,
             'order_id': self.order_id,
@@ -135,8 +140,8 @@ class OrderItem(db.Model):
             'gst_rate': self.gst_rate,
             'line_total': self.line_total,
             'gst_amount': self.gst_amount,
-            'product_name': self.product.name if self.product else None,
-            'product_sku': self.product.sku if self.product else None
+            'product_name': product_name,
+            'product_sku': product_sku
         }
     
     def calculate_totals(self):
