@@ -7,7 +7,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#3b82f6">
-    <title>{% block title %}Stock Inventory Management{% endblock %}</title>
+    <title>{% block title %}Stock Inventory Management - Prince Chourasiya{% endblock %}</title>
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
     
     <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=20250830modern">
@@ -31,8 +37,8 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <i class="fas fa-cube logo-icon"></i>
-                <span class="logo-text">StockManager Pro</span>
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="PC Logo" class="logo-icon" style="width: 32px; height: 32px; border-radius: 6px;">
+                <span class="logo-text">Prince Chourasiya</span>
                 <div class="logo-pulse"></div>
             </div>
             <button class="sidebar-toggle" id="sidebarToggle">

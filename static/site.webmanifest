@@ -1,0 +1,26 @@
+{
+    "name": "Stock Inventory Management - Prince Chourasiya",
+    "short_name": "StockManager PC",
+    "description": "Professional Stock Inventory Management System by Prince Chourasiya",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#3b82f6",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/static/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "/static/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "categories": ["business", "productivity", "inventory"],
+    "lang": "en-US"
+}
