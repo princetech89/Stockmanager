@@ -7,7 +7,14 @@ class User(db.Model):
     username = db.Column(db.String(64), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(256))
-    role = db.Column(db.String(20), default='staff')  # admin, staff, customer
+    role = db.Column(db.String(20), default='staff')  # admin, manager, staff, viewer
+    # Enhanced user management
+    is_active = db.Column(db.Boolean, default=True)
+    last_login = db.Column(db.DateTime)
+    permissions = db.Column(db.Text)  # JSON string of permissions
+    department = db.Column(db.String(50))
+    phone = db.Column(db.String(15))
+    profile_image = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Product(db.Model):
@@ -66,6 +73,12 @@ class Supplier(db.Model):
     email = db.Column(db.String(120))
     gst_number = db.Column(db.String(15))
     address = db.Column(db.Text)
+    # Enhanced vendor management
+    payment_terms = db.Column(db.String(100), default='Net 30')  # Payment terms
+    credit_limit = db.Column(db.Float, default=0.0)
+    current_balance = db.Column(db.Float, default=0.0)
+    rating = db.Column(db.Integer, default=5)  # 1-5 star rating
+    is_active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 # Batch tracking for products with expiry dates
