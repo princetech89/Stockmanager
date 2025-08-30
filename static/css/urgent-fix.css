@@ -1,0 +1,40 @@
+
+/* URGENT FIX - Ensure main content is visible */
+.main-content, 
+.page-content,
+.dashboard-content,
+.metrics-grid,
+.charts-grid,
+.metric-card,
+.chart-card {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Make sure dashboard shows properly */
+body {
+    background: var(--dashboard-bg) !important;
+}
+
+.page-content {
+    min-height: 100vh !important;
+    padding: 20px !important;
+}
+
+/* Fix potential z-index issues */
+.main-content {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+.dashboard-background {
+    z-index: -1 !important;
+}
+
+/* Force display of dashboard elements */
+.dashboard-content * {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
