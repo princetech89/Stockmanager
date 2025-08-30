@@ -219,8 +219,8 @@ class DashboardManager {
 
         try {
             // Get recent orders from both sales and purchase
-            const salesOrders = await DataStorage.getOrders('sales');
-            const purchaseOrders = await DataStorage.getOrders('purchase');
+            const salesOrders = await window.DataStorage.getOrders('sales');
+            const purchaseOrders = await window.DataStorage.getOrders('purchase');
             
             const allOrders = [...salesOrders, ...purchaseOrders]
                 .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
@@ -234,7 +234,7 @@ class DashboardManager {
             const activitiesHTML = allOrders.map(order => {
                 const icon = order.order_type === 'sales' ? 'fas fa-shopping-cart' : 'fas fa-truck';
                 const action = order.order_type === 'sales' ? 'Sale Order' : 'Purchase Order';
-                const amount = DataStorage.formatCurrency(order.total_amount || 0);
+                const amount = window.DataStorage.formatCurrency(order.total_amount || 0);
                 
                 return `
                     <div class="activity-item">
