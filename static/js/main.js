@@ -52,27 +52,78 @@ class StockManagementApp {
             this.handleResize();
         });
 
-        // Handle clicks outside modal
+        // Auto-close functionality
         document.addEventListener('click', (e) => {
+            // Close modal on backdrop click
             if (e.target.classList.contains('modal')) {
                 this.closeModal();
             }
-        });
-
-        // Handle ESC key for modals
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                this.closeModal();
+            
+            // Auto-close sidebar on outside click (mobile)
+            if (window.innerWidth <= 1024) {
+                if (!this.sidebar.contains(e.target) && !this.sidebarToggle.contains(e.target)) {
+                    if (!this.sidebar.classList.contains('collapsed')) {
+                        this.collapseSidebar();
+                    }
+                }
+            }
+            
+            // Auto-close side panels on outside click
+            const sidePanel = document.querySelector('.side-panel.active');
+            if (sidePanel && !sidePanel.contains(e.target) && !e.target.closest('.btn-primary')) {
+                if (window.inventoryManager && window.inventoryManager.closeSidePanel) {
+                    window.inventoryManager.closeSidePanel();
+                }
             }
         });
 
-        // Profile menu dropdown
+        // Enhanced ESC key handling
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // Close modals first
+                this.closeModal();
+                
+                // Close side panels
+                const sidePanel = document.querySelector('.side-panel.active');
+                if (sidePanel && window.inventoryManager && window.inventoryManager.closeSidePanel) {
+                    window.inventoryManager.closeSidePanel();
+                }
+                
+                // Collapse sidebar on mobile
+                if (window.innerWidth <= 1024 && !this.sidebar.classList.contains('collapsed')) {
+                    this.collapseSidebar();
+                }
+            }
+        });
+
+        // Profile menu dropdown with animation
         const profileMenu = document.querySelector('.profile-menu');
         if (profileMenu) {
-            profileMenu.addEventListener('click', () => {
+            profileMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
                 this.toggleProfileDropdown();
             });
         }
+
+        // Auto-close on inactivity (optional)
+        let inactivityTimer;
+        const resetInactivityTimer = () => {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(() => {
+                // Auto-collapse sidebar after 5 minutes of inactivity on desktop
+                if (window.innerWidth > 1024 && !this.sidebar.classList.contains('collapsed')) {
+                    this.collapseSidebar();
+                }
+            }, 300000); // 5 minutes
+        };
+
+        // Reset timer on user activity
+        document.addEventListener('mousemove', resetInactivityTimer);
+        document.addEventListener('keypress', resetInactivityTimer);
+        document.addEventListener('click', resetInactivityTimer);
+        
+        resetInactivityTimer(); // Initialize timer
+    }
     }
 
     toggleSidebar() {
@@ -80,7 +131,39 @@ class StockManagementApp {
         const isCollapsed = this.sidebar.classList.contains('collapsed');
         localStorage.setItem('sidebarCollapsed', isCollapsed);
         
+        // Add smooth animation
+        this.sidebar.style.transform = isCollapsed ? 'translateX(-10px)' : 'scale(1.02)';
+        setTimeout(() => {
+            this.sidebar.style.transform = '';
+        }, 200);
+        
         // Update tooltips
+        this.updateTooltips();
+    }
+
+    collapseSidebar() {
+        this.sidebar.classList.add('collapsed');
+        localStorage.setItem('sidebarCollapsed', 'true');
+        
+        // Add smooth animation
+        this.sidebar.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+            this.sidebar.style.transform = '';
+        }, 300);
+        
+        this.updateTooltips();
+    }
+
+    expandSidebar() {
+        this.sidebar.classList.remove('collapsed');
+        localStorage.setItem('sidebarCollapsed', 'false');
+        
+        // Add smooth animation  
+        this.sidebar.style.transform = 'scale(1.02)';
+        setTimeout(() => {
+            this.sidebar.style.transform = '';
+        }, 300);
+        
         this.updateTooltips();
     }
 
