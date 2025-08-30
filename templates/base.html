@@ -24,8 +24,9 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">
-                <i class="fas fa-boxes"></i>
-                <span class="logo-text">StockMgmt</span>
+                <i class="fas fa-cube logo-icon"></i>
+                <span class="logo-text">StockManager Pro</span>
+                <div class="logo-pulse"></div>
             </div>
             <button class="sidebar-toggle" id="sidebarToggle">
                 <i class="fas fa-bars"></i>
@@ -128,6 +129,7 @@
             console.log('DataStorage loaded successfully');
         }
     </script>
+    <script src="{{ url_for('static', filename='js/animations.js') }}?v=20250830v1"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}?v=20250830v9"></script>
     
     {% block scripts %}{% endblock %}

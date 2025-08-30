@@ -32,6 +32,55 @@
     --radius-lg: 12px;
     
     --transition: all 0.3s ease;
+    
+    /* Animation Variables */
+    --animation-bounce: bounce 0.5s ease-in-out;
+    --animation-slide: slideIn 0.8s ease-out;
+    --animation-fade: fadeIn 0.6s ease-out;
+    --animation-scale: scaleIn 0.4s ease-out;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounce {
+    0%, 20%, 60%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    80% { transform: translateY(-5px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rotateIn {
+    from { opacity: 0; transform: rotate(-10deg) scale(0.8); }
+    to { opacity: 1; transform: rotate(0deg) scale(1); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -200px 0; }
+    100% { background-position: calc(200px + 100%) 0; }
 }
 
 /* Reset and Base Styles */
@@ -46,6 +95,7 @@ body {
     background-color: var(--bg-secondary);
     color: var(--text-primary);
     line-height: 1.6;
+    animation: var(--animation-fade);
 }
 
 /* Sidebar Styles */
@@ -83,6 +133,47 @@ body {
     font-weight: 700;
     font-size: 1.25rem;
     color: var(--primary-color);
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulse 2s ease-in-out infinite;
+    transition: all 0.3s ease;
+}
+
+.logo:hover .logo-icon {
+    animation: rotateIn 0.6s ease-out;
+    transform: scale(1.2);
+}
+
+.logo-text {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
+
+.logo-pulse {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    background: linear-gradient(45deg, #10b981, #059669);
+    border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
 }
 
 .logo i {
@@ -90,6 +181,10 @@ body {
 }
 
 .sidebar.collapsed .logo-text {
+    display: none;
+}
+
+.sidebar.collapsed .logo-pulse {
     display: none;
 }
 
@@ -170,7 +265,8 @@ body {
 
 /* Top Navigation */
 .topbar {
-    background: var(--bg-primary);
+    background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248,250,252,0.95));
+    backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
     padding: 0 2rem;
     height: var(--topbar-height);
@@ -180,6 +276,8 @@ body {
     position: sticky;
     top: 0;
     z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+    animation: slideInFromTop 0.8s ease-out;
 }
 
 .topbar-left {
@@ -440,12 +538,37 @@ body {
     align-items: center;
     gap: 1rem;
     transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    animation: var(--animation-scale);
+}
+
+.metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+    transition: left 0.6s ease;
+}
+
+.metric-card:hover::before {
+    left: 100%;
 }
 
 .metric-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-8px) scale(1.02);
+    border-color: var(--primary-color);
 }
+
+.metric-card:nth-child(1) { animation-delay: 0.1s; }
+.metric-card:nth-child(2) { animation-delay: 0.2s; }
+.metric-card:nth-child(3) { animation-delay: 0.3s; }
+.metric-card:nth-child(4) { animation-delay: 0.4s; }
 
 .metric-card.alert {
     border-left: 4px solid var(--warning-color);
@@ -455,12 +578,36 @@ body {
     width: 60px;
     height: 60px;
     border-radius: var(--radius-lg);
-    background-color: var(--bg-tertiary);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
-    color: var(--primary-color);
+    color: white;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.metric-icon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.metric-card:hover .metric-icon {
+    transform: rotate(10deg) scale(1.1);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.metric-card:hover .metric-icon::after {
+    opacity: 1;
 }
 
 .metric-content {
@@ -473,6 +620,16 @@ body {
     color: var(--text-primary);
     margin: 0;
     line-height: 1.2;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, var(--text-primary), var(--primary-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.metric-card:hover .metric-value {
+    transform: scale(1.05);
+    animation: pulse 1s ease-in-out;
 }
 
 .metric-label {
